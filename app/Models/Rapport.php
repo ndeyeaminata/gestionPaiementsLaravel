@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Rapport extends Model
 {
     use HasFactory;
+    protected $fillable = ['detailRapport','dateSoumission','statut'];
 }

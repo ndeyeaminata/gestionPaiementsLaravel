@@ -12,7 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fiche_presences', function (Blueprint $table) {
-            $table->id();
+            $table->id('idFichePresence');
+            $table->integer('nbreHeure');
+            $table->string('certificatMentore');
+            $table->integer('numGroupe');
+            $table->string('statut');
             $table->timestamps();
         });
     }

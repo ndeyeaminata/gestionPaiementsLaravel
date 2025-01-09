@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mentors', function (Blueprint $table) {
-            $table->id();
+            $table->id('idMentor');
+            $table->foreingid('idUtilisateur')->constrained('utilisateur')->ondelette('cascade');
             $table->timestamps();
         });
     }

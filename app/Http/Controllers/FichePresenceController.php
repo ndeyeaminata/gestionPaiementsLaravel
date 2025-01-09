@@ -8,58 +8,74 @@ use Illuminate\Http\Request;
 class FichePresenceController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Affiche la liste des fiches de présence.
      */
     public function index()
     {
-        //
+        $fichesPresence = FichePresence::all();
+        return view('fiches_presence.index', compact('fichesPresence'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Affiche le formulaire de création d'une fiche de présence.
      */
     public function create()
     {
-        //
+        return view('fiches_presence.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Enregistre une nouvelle fiche de présence.
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'dateHeureEntree' => 'required|datetime',
+            'carteIdentiteMentor' => 'required|string|max:255',
+            'statut' => 'required|string|max:255',
+        ]);
+
+        FichePresence::create($validated);
+        return redirect()->route('fiches_presence.index')->with('success', 'Fiche de présence créée avec succès.');
     }
 
     /**
-     * Display the specified resource.
+     * Affiche une fiche de présence spécifique.
      */
     public function show(FichePresence $fichePresence)
     {
-        //
+        return view('fiches_presence.show', compact('fichePresence'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Affiche le formulaire d'édition d'une fiche de présence.
      */
     public function edit(FichePresence $fichePresence)
     {
-        //
+        return view('fiches_presence.edit', compact('fichePresence'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Met à jour une fiche de présence.
      */
     public function update(Request $request, FichePresence $fichePresence)
     {
-        //
+        $validated = $request->validate([
+            'dateHeureEntree' => 'required|datetime',
+            'carteIdentiteMentor' => 'required|string|max:255',
+            'statut' => 'required|string|max:255',
+        ]);
+
+        $fichePresence->update($validated);
+        return redirect()->route('fiches_presence.index')->with('success', 'Fiche de présence mise à jour avec succès.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprime une fiche de présence.
      */
     public function destroy(FichePresence $fichePresence)
     {
-        //
+        $fichePresence->delete();
+        return redirect()->route('fiches_presence.index')->with('success', 'Fiche de présence supprimée avec succès.');
     }
 }

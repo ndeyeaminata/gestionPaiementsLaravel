@@ -8,51 +8,62 @@ use Illuminate\Http\Request;
 class EtatFinancierController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Affiche la liste des états financiers.
      */
     public function index()
     {
-        //
+        $etatFinanciers = EtatFinancier::all();
+        return view('etat_financiers.index', compact('etatFinanciers'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Affiche le formulaire de création d'un état financier.
      */
     public function create()
     {
-        //
+        return view('etat_financiers.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Enregistre un nouvel état financier.
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'statut' => 'required|string|max:255',
+        ]);
+
+        EtatFinancier::create($validated);
+        return redirect()->route('etat_financiers.index')->with('success', 'État financier créé avec succès.');
     }
 
     /**
-     * Display the specified resource.
+     * Affiche un état financier spécifique.
      */
     public function show(EtatFinancier $etatFinancier)
     {
-        //
+        return view('etat_financiers.show', compact('etatFinancier'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Affiche le formulaire d'édition d'un état financier.
      */
     public function edit(EtatFinancier $etatFinancier)
     {
-        //
+        return view('etat_financiers.edit', compact('etatFinancier'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Met à jour un état financier.
      */
     public function update(Request $request, EtatFinancier $etatFinancier)
     {
-        //
+        $validated = $request->validate([
+            'statut' => 'required|string|max:255',
+        ]);
+
+        $etatFinancier->update($validated);
+        return redirect()->route('etat_financiers.index')->with('success', 'État financier mis à jour avec succès.');
     }
 
     /**
@@ -60,6 +71,7 @@ class EtatFinancierController extends Controller
      */
     public function destroy(EtatFinancier $etatFinancier)
     {
-        //
+        $etatFinancier->delete();
+        return redirect()->route('etatFinancier.index')->with('success', 'Etat Financier supprimé avec succès.');
     }
 }

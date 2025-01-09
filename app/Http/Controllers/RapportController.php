@@ -8,58 +8,71 @@ use Illuminate\Http\Request;
 class RapportController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Affiche la liste des rapports.
      */
     public function index()
     {
-        //
+        $rapports = Rapport::all();
+        return view('rapports.index', compact('rapports'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Affiche le formulaire de création d'un rapport.
      */
     public function create()
     {
-        //
+        return view('rapports.create');
     }
-
     /**
-     * Store a newly created resource in storage.
+     * Enregistre un nouveau rapport.
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'dateSoumission' => 'required|date',
+            'statut' => 'required|string|max:255',
+        ]);
+
+        Rapport::create($validated);
+        return redirect()->route('rapports.index')->with('success', 'Rapport créé avec succès.');
     }
 
     /**
-     * Display the specified resource.
+     * Affiche un rapport spécifique.
      */
     public function show(Rapport $rapport)
     {
-        //
+        return view('rapports.show', compact('rapport'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Affiche le formulaire d'édition d'un rapport.
      */
     public function edit(Rapport $rapport)
     {
-        //
+        return view('rapports.edit', compact('rapport'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Met à jour un rapport.
      */
     public function update(Request $request, Rapport $rapport)
     {
-        //
+        $validated = $request->validate([
+            'dateSubmission' => 'required|date',
+            'statut' => 'required|string|max:255',
+        ]);
+
+        $rapport->update($validated);
+        return redirect()->route('rapports.index')->with('success', 'Rapport mis à jour avec succès.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprime un rapport.
      */
     public function destroy(Rapport $rapport)
     {
-        //
+        $rapport->delete();
+        return redirect()->route('rapports.index')->with('success', 'Rapport supprimé avec succès.');
     }
 }

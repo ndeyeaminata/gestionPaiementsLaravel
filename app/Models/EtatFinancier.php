@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class EtatFinancier extends Model
 {
     use HasFactory;
+    protected $fillable=['statut'];
 }
