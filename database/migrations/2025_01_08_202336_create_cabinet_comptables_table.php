@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('cabinet_comptables', function (Blueprint $table) {
             $table->id();
+            $table->string('nomCabinet');
+            $table->foreignId('etatFinancier_id')->constrained('etat_financiers');
             $table->timestamps();
         });
     }

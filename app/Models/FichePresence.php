@@ -8,21 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class FichePresence extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'nombre_heures',
+        'certificat',
+        'numero_groupe',
+        'statut',
+        'mentor_id',
+        'consultant_id',
+    ];
 
-     /**
-     * Les attributs assignables en masse.
-     */
-    protected $fillable=['nbreHeure', 'certificatMentore','numGroupe','statut'];
+    public function mentor(): BelongsTo
+    {
+        return $this->belongsTo(Mentor::class, 'mentor_id');
+    }
 
-
- /**
-     * Relation avec le modèle Mentor (Utilisateur).
-     */
-
-     public function mentors()
-     {
-        return $this->belongsTo(Mentor::class, 'certificatMentore', 'idMentor'); //cle etrangère: certificatMentore
-     }
-
-
+    public function consultant(): BelongsTo
+    {
+        return $this->belongsTo(Consultant::class, 'consultant_id');
+    }
 }

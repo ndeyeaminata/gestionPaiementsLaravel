@@ -8,5 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Rapport extends Model
 {
     use HasFactory;
-    protected $fillable = ['detailRapport','dateSoumission','statut'];
+    protected $fillable = [
+        'date_soumission',
+        'detail_rapport',
+        'statut',
+        'consultant_id',
+    ];
+
+    public function consultant(): BelongsTo
+    {
+        return $this->belongsTo(Consultant::class, 'consultant_id');
+    }
 }
