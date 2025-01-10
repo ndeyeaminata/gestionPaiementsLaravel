@@ -7,59 +7,71 @@ use Illuminate\Http\Request;
 
 class UNCHKController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Liste tous les UNCHK
     public function index()
     {
-        //
+        return response()->json(UNCHK::with('etatFinancier')->get());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Affiche un UNCHK spécifique
+    public function show($id)
     {
-        //
+        $unchk = UNCHK::with('etatFinancier')->find($id);
+
+        if (!$unchk) {
+            return response()->json(['message' => 'UNCHK non trouvé'], 404);
+        }
+
+        return response()->json($unchk);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // Crée un nouveau UNCHK
+    public function create(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'montant' => 'required|numeric',
+            'date_soumission' => 'required|date',
+            'statut' => 'required|string',
+            'etatFinancier_id' => 'required|exists:etat_financiers,id',
+        ]);
+
+        $unchk = UNCHK::create($validated);
+
+        return response()->json($unchk, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(UNCHK $uNCHK)
+    // Met à jour un UNCHK existant
+    public function update(Request $request, $id)
     {
-        //
+        $unchk = UNCHK::find($id);
+
+        if (!$unchk) {
+            return response()->json(['message' => 'UNCHK non trouvé'], 404);
+        }
+
+        $validated = $request->validate([
+            'montant' => 'required|numeric',
+            'date_soumission' => 'required|date',
+            'statut' => 'required|string',
+            'etatFinancier_id' => 'required|exists:etat_financiers,id',
+        ]);
+
+        $unchk->update($validated);
+
+        return response()->json($unchk);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(UNCHK $uNCHK)
+    // Supprime un UNCHK
+    public function destroy($id)
     {
-        //
-    }
+        $unchk = UNCHK::find($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, UNCHK $uNCHK)
-    {
-        //
-    }
+        if (!$unchk) {
+            return response()->json(['message' => 'UNCHK non trouvé'], 404);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(UNCHK $uNCHK)
-    {
-        //
+        $unchk->delete();
+
+        return response()->json(['message' => 'UNCHK supprimé avec succès']);
     }
 }

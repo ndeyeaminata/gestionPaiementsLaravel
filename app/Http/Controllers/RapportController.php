@@ -7,59 +7,71 @@ use Illuminate\Http\Request;
 
 class RapportController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Liste tous les rapports
     public function index()
     {
-        //
+        return response()->json(Rapport::with('consultant')->get());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Affiche un rapport spécifique
+    public function show($id)
     {
-        //
+        $rapport = Rapport::with('consultant')->find($id);
+
+        if (!$rapport) {
+            return response()->json(['message' => 'Rapport non trouvé'], 404);
+        }
+
+        return response()->json($rapport);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // Crée un nouveau rapport
+    public function create(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'date_soumission' => 'required|date',
+            'detail_rapport' => 'required|string',
+            'statut' => 'required|string',
+            'consultant_id' => 'required|exists:consultants,id',
+        ]);
+
+        $rapport = Rapport::create($validated);
+
+        return response()->json($rapport, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Rapport $rapport)
+    // Met à jour un rapport existant
+    public function update(Request $request, $id)
     {
-        //
+        $rapport = Rapport::find($id);
+
+        if (!$rapport) {
+            return response()->json(['message' => 'Rapport non trouvé'], 404);
+        }
+
+        $validated = $request->validate([
+            'date_soumission' => 'required|date',
+            'detail_rapport' => 'required|string',
+            'statut' => 'required|string',
+            'consultant_id' => 'required|exists:consultants,id',
+        ]);
+
+        $rapport->update($validated);
+
+        return response()->json($rapport);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Rapport $rapport)
+    // Supprime un rapport
+    public function destroy($id)
     {
-        //
-    }
+        $rapport = Rapport::find($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Rapport $rapport)
-    {
-        //
-    }
+        if (!$rapport) {
+            return response()->json(['message' => 'Rapport non trouvé'], 404);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Rapport $rapport)
-    {
-        //
+        $rapport->delete();
+
+        return response()->json(['message' => 'Rapport supprimé avec succès']);
     }
 }

@@ -7,59 +7,65 @@ use Illuminate\Http\Request;
 
 class EtatFinancierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Liste tous les états financiers
     public function index()
     {
-        //
+        return response()->json(EtatFinancier::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Affiche un état financier spécifique
+    public function show($id)
     {
-        //
+        $etatFinancier = EtatFinancier::find($id);
+
+        if (!$etatFinancier) {
+            return response()->json(['message' => 'État financier non trouvé'], 404);
+        }
+
+        return response()->json($etatFinancier);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // Crée un nouvel état financier
+    public function create(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'statut' => 'required|string|max:255',
+        ]);
+
+        $etatFinancier = EtatFinancier::create($validated);
+
+        return response()->json($etatFinancier, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(EtatFinancier $etatFinancier)
+    // Met à jour un état financier existant
+    public function update(Request $request, $id)
     {
-        //
+        $etatFinancier = EtatFinancier::find($id);
+
+        if (!$etatFinancier) {
+            return response()->json(['message' => 'État financier non trouvé'], 404);
+        }
+
+        $validated = $request->validate([
+            'statut' => 'required|string|max:255',
+        ]);
+
+        $etatFinancier->update($validated);
+
+        return response()->json($etatFinancier);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(EtatFinancier $etatFinancier)
+    // Supprime un état financier
+    public function destroy($id)
     {
-        //
-    }
+        $etatFinancier = EtatFinancier::find($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, EtatFinancier $etatFinancier)
-    {
-        //
-    }
+        if (!$etatFinancier) {
+            return response()->json(['message' => 'État financier non trouvé'], 404);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(EtatFinancier $etatFinancier)
-    {
-        //
+        $etatFinancier->delete();
+
+        return response()->json(['message' => 'État financier supprimé avec succès']);
     }
 }

@@ -7,59 +7,67 @@ use Illuminate\Http\Request;
 
 class ServiceFinancierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Liste tous les services financiers
     public function index()
     {
-        //
+        return response()->json(ServiceFinancier::with('etatFinancier')->get());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Affiche un service financier spécifique
+    public function show($id)
     {
-        //
+        $serviceFinancier = ServiceFinancier::with('etatFinancier')->find($id);
+
+        if (!$serviceFinancier) {
+            return response()->json(['message' => 'Service financier non trouvé'], 404);
+        }
+
+        return response()->json($serviceFinancier);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // Crée un nouveau service financier
+    public function create(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255',
+            'etatFinancier_id' => 'required|exists:etat_financiers,id',
+        ]);
+
+        $serviceFinancier = ServiceFinancier::create($validated);
+
+        return response()->json($serviceFinancier, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ServiceFinancier $serviceFinancier)
+    // Met à jour un service financier existant
+    public function update(Request $request, $id)
     {
-        //
+        $serviceFinancier = ServiceFinancier::find($id);
+
+        if (!$serviceFinancier) {
+            return response()->json(['message' => 'Service financier non trouvé'], 404);
+        }
+
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255',
+            'etatFinancier_id' => 'required|exists:etat_financiers,id',
+        ]);
+
+        $serviceFinancier->update($validated);
+
+        return response()->json($serviceFinancier);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ServiceFinancier $serviceFinancier)
+    // Supprime un service financier
+    public function destroy($id)
     {
-        //
-    }
+        $serviceFinancier = ServiceFinancier::find($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ServiceFinancier $serviceFinancier)
-    {
-        //
-    }
+        if (!$serviceFinancier) {
+            return response()->json(['message' => 'Service financier non trouvé'], 404);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ServiceFinancier $serviceFinancier)
-    {
-        //
+        $serviceFinancier->delete();
+
+        return response()->json(['message' => 'Service financier supprimé avec succès']);
     }
 }

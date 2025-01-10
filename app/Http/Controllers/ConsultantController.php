@@ -7,59 +7,58 @@ use Illuminate\Http\Request;
 
 class ConsultantController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Liste tous les consultants
     public function index()
     {
-        //
+        return response()->json(Consultant::with('utilisateur')->get());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Affiche un consultant spécifique
+    public function show($id)
     {
-        //
+        $consultant = Consultant::with('utilisateur')->find($id);
+        if (!$consultant) {
+            return response()->json(['message' => 'Consultant non trouvé'], 404);
+        }
+        return response()->json($consultant);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Crée un nouveau consultant
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'utilisateur_id' => 'required|exists:utilisateurs,id',
+        ]);
+
+        $consultant = Consultant::create($validated);
+        return response()->json($consultant, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Consultant $consultant)
+    // Met à jour un consultant existant
+    public function update(Request $request, $id)
     {
-        //
+        $consultant = Consultant::find($id);
+        if (!$consultant) {
+            return response()->json(['message' => 'Consultant non trouvé'], 404);
+        }
+
+        $validated = $request->validate([
+            'utilisateur_id' => 'required|exists:utilisateurs,id',
+        ]);
+
+        $consultant->update($validated);
+        return response()->json($consultant);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Consultant $consultant)
+    // Supprime un consultant
+    public function destroy($id)
     {
-        //
-    }
+        $consultant = Consultant::find($id);
+        if (!$consultant) {
+            return response()->json(['message' => 'Consultant non trouvé'], 404);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Consultant $consultant)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Consultant $consultant)
-    {
-        //
+        $consultant->delete();
+        return response()->json(['message' => 'Consultant supprimé avec succès']);
     }
 }

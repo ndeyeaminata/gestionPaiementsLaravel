@@ -7,59 +7,70 @@ use Illuminate\Http\Request;
 
 class CompteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Afficher tous les comptes
     public function index()
     {
-        //
+        $comptes = Compte::all();
+        return response()->json($comptes);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Afficher un compte spécifique
+    public function show($id)
     {
-        //
+        $compte = Compte::find($id);
+        if (!$compte) {
+            return response()->json(['message' => 'Compte non trouvé'], 404);
+        }
+        return response()->json([
+            'message' => 'Compte trouvé ',
+            'compte' => $compte,
+        ],200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // Créer un nouveau compte
+    public function store(Request $request, $id)
     {
-        //
+        $request = validate([
+            'email' => 'required|email|unique:comptes,email',
+            'password' => 'required|min:6',
+        ]);
+
+        $compte = Compte::create([
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+        
+        return response()->json([
+            'message' => 'Compte créé avec succès',
+            'compte' => $compte,
+        ],200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Compte $compte)
+    // Mettre à jour un compte
+    public function update(Request $request, $id)
     {
-        //
+        $compte = Compte::find($id);
+
+        $request->validate([
+            'email' => 'required|email|unique:comptes,email,' . $id,
+            'password' => 'nullable|min:6',
+        ]);
+
+        $compte->update($request->only(['email', 'password']));
+        return response()->json(
+            [
+                'message' => 'Compte mis à jour avec succès',
+                'compte' => $compte,
+            ],200
+        );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Compte $compte)
+    // Supprimer un compte
+    public function destroy($id)
     {
-        //
-    }
+        $compte = Compte::findOrFail($id);
+        $compte->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Compte $compte)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Compte $compte)
-    {
-        //
+        return response()->json(['message' => 'Compte supprimé avec succès']);
     }
 }

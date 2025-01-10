@@ -7,59 +7,64 @@ use Illuminate\Http\Request;
 
 class MentorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Liste tous les mentors
     public function index()
     {
-        //
+        return response()->json(Mentor::with('utilisateur')->get());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Affiche un mentor spécifique
+    public function show($id)
     {
-        //
+        $mentor = Mentor::with('utilisateur')->find($id);
+
+        if (!$mentor) {
+            return response()->json(['message' => 'Mentor non trouvé'], 404);
+        }
+
+        return response()->json($mentor);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Crée un nouveau mentor
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'utilisateur_id' => 'required|exists:utilisateurs,id',
+        ]);
+
+        $mentor = Mentor::create($validated);
+
+        return response()->json($mentor, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Mentor $mentor)
+    // Met à jour un mentor existant
+    public function update(Request $request, $id)
     {
-        //
+        $mentor = Mentor::find($id);
+
+        if (!$mentor) {
+            return response()->json(['message' => 'Mentor non trouvé'], 404);
+        }
+
+        $validated = $request->validate([
+            'utilisateur_id' => 'required|exists:utilisateurs,id',
+        ]);
+
+        $mentor->update($validated);
+
+        return response()->json($mentor);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Mentor $mentor)
-    {
-        //
+    // Supprime un mentor
+    public function destroy($id){
+        $mentor = Mentor::find($id);
+        if (!$mentor) {
+            return response()->json(['message' => 'Mentor non trouvé'], 404);
+        }
+
+        $mentor->delete();
+
+        return response()->json(['message' => 'Mentor supprimé avec succès']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Mentor $mentor)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Mentor $mentor)
-    {
-        //
-    }
 }
