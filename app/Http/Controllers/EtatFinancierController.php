@@ -13,15 +13,25 @@ class EtatFinancierController extends Controller
     public function index()
     {
         $etatFinanciers = EtatFinancier::all();
-        return view('etat_financiers.index', compact('etatFinanciers'));
+        return response()->json($etatFinanciers);
     }
 
     /**
      * Affiche le formulaire de création d'un état financier.
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('etat_financiers.create');
+        $request = validate([
+            'statut' => 'required||string',
+        ]);
+
+        $etatFinancier = EtatFinancier::create([
+            'statut' => $request -> statut,
+        ]);
+
+        return response()->json([
+            'message'=>'etatFinancier créé avec succès',
+        ]);
     }
 
     /**
