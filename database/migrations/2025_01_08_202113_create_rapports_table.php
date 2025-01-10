@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('rapports', function (Blueprint $table) {
             $table->id();
+            $table->date('date_soumission');
+            $table->string('detail_rapport');
+            $table->string('statut');
+            $table->foreignId('consultant_id')->constrained('consultants');
             $table->timestamps();
         });
     }

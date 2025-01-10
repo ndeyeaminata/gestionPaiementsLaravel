@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('service_financiers', function (Blueprint $table) {
             $table->id();
+            $table->string('nomService');
+            $table->foreignId('etantFinancier_id')->constrained('etat_financiers');
             $table->timestamps();
         });
     }

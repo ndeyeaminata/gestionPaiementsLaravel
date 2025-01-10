@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comptes', function (Blueprint $table) {
+        Schema::create('etat_financiers', function (Blueprint $table) {
             $table->id();
+            $table->boolean('statut')->default(false);
             $table->timestamps();
         });
     }
@@ -22,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comptes');
+        Schema::dropIfExists('etat_financiers');
     }
 };

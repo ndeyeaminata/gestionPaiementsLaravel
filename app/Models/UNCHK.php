@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class UNCHK extends Model
 {
     use HasFactory;
+    protected $fillable = ['montant', 'date_soumission', 'statut', 'etatFinancier_id'];
+
+    public function etatFinancier(): BelongsTo
+    {
+        return $this->belongsTo(EtatFinancier::class, 'etatFinancier_id');
+    }
 }
