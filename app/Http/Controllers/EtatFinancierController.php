@@ -7,81 +7,65 @@ use Illuminate\Http\Request;
 
 class EtatFinancierController extends Controller
 {
-    /**
-     * Affiche la liste des états financiers.
-     */
+    // Liste tous les états financiers
     public function index()
     {
-        $etatFinanciers = EtatFinancier::all();
-        return response()->json($etatFinanciers);
+        return response()->json(EtatFinancier::all());
     }
 
-    /**
-     * Affiche le formulaire de création d'un état financier.
-     */
-    public function create(Request $request)
+    // Affiche un état financier spécifique
+    public function show($id)
     {
-        $request = validate([
-            'statut' => 'required||string',
-        ]);
+        $etatFinancier = EtatFinancier::find($id);
 
-        $etatFinancier = EtatFinancier::create([
-            'statut' => $request -> statut,
-        ]);
+        if (!$etatFinancier) {
+            return response()->json(['message' => 'État financier non trouvé'], 404);
+        }
 
-        return response()->json([
-            'message'=>'etatFinancier créé avec succès',
-        ]);
+        return response()->json($etatFinancier);
     }
 
-    /**
-     * Enregistre un nouvel état financier.
-     */
-    public function store(Request $request)
+    // Crée un nouvel état financier
+    public function create(Request $request)
     {
         $validated = $request->validate([
             'statut' => 'required|string|max:255',
         ]);
 
-        EtatFinancier::create($validated);
-        return redirect()->route('etat_financiers.index')->with('success', 'État financier créé avec succès.');
+        $etatFinancier = EtatFinancier::create($validated);
+
+        return response()->json($etatFinancier, 201);
     }
 
-    /**
-     * Affiche un état financier spécifique.
-     */
-    public function show(EtatFinancier $etatFinancier)
+    // Met à jour un état financier existant
+    public function update(Request $request, $id)
     {
-        return view('etat_financiers.show', compact('etatFinancier'));
-    }
+        $etatFinancier = EtatFinancier::find($id);
 
-    /**
-     * Affiche le formulaire d'édition d'un état financier.
-     */
-    public function edit(EtatFinancier $etatFinancier)
-    {
-        return view('etat_financiers.edit', compact('etatFinancier'));
-    }
+        if (!$etatFinancier) {
+            return response()->json(['message' => 'État financier non trouvé'], 404);
+        }
 
-    /**
-     * Met à jour un état financier.
-     */
-    public function update(Request $request, EtatFinancier $etatFinancier)
-    {
         $validated = $request->validate([
             'statut' => 'required|string|max:255',
         ]);
 
         $etatFinancier->update($validated);
-        return redirect()->route('etat_financiers.index')->with('success', 'État financier mis à jour avec succès.');
+
+        return response()->json($etatFinancier);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(EtatFinancier $etatFinancier)
+    // Supprime un état financier
+    public function destroy($id)
     {
+        $etatFinancier = EtatFinancier::find($id);
+
+        if (!$etatFinancier) {
+            return response()->json(['message' => 'État financier non trouvé'], 404);
+        }
+
         $etatFinancier->delete();
-        return redirect()->route('etatFinancier.index')->with('success', 'Etat Financier supprimé avec succès.');
+
+        return response()->json(['message' => 'État financier supprimé avec succès']);
     }
 }

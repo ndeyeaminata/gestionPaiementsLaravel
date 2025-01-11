@@ -7,79 +7,64 @@ use Illuminate\Http\Request;
 
 class MentorController extends Controller
 {
-    /**
-     * Affiche la liste des mentors.
-     */
+    // Liste tous les mentors
     public function index()
     {
-        $mentors=Mentor::all();
-        return view('mentors.index', compact('mentors'));
+        return response()->json(Mentor::with('utilisateur')->get());
     }
 
-    /**
-     * Affiche le formulaire de création d'un mentor.
-     */
-    public function create()
+    // Affiche un mentor spécifique
+    public function show($id)
     {
-        return view('mentors.create');
+        $mentor = Mentor::with('utilisateur')->find($id);
+
+        if (!$mentor) {
+            return response()->json(['message' => 'Mentor non trouvé'], 404);
+        }
+
+        return response()->json($mentor);
     }
 
-    /**
-     * Enregistre un nouveau mentor.
-     */
+    // Crée un nouveau mentor
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
-            'email' => 'required|email|unique:utilisateurs,email',
-            'motDePasse' => 'required|string|min:8',
-            'telephone' => 'nullable|string',
+            'utilisateur_id' => 'required|exists:utilisateurs,id',
         ]);
 
-        Mentor::create($validated);
-        return redirect()->route('mentors.index')->with('success', 'Mentor créé avec succès.');
+        $mentor = Mentor::create($validated);
+
+        return response()->json($mentor, 201);
     }
 
-    /**
-     * Affiche un mentor spécifique.
-     */
-    public function show(Mentor $mentor)
+    // Met à jour un mentor existant
+    public function update(Request $request, $id)
     {
-        return view('mentors.show', compact('mentor'));
-    }
+        $mentor = Mentor::find($id);
 
-    /**
-     *  Affiche le formulaire d'édition d'un mentor.
-     */
-    public function edit(Mentor $mentor)
-    {
-        return view('mentors.edit', compact('mentor'));
-    }
+        if (!$mentor) {
+            return response()->json(['message' => 'Mentor non trouvé'], 404);
+        }
 
-    /**
-     * Met à jour les informations d'un mentor.
-     */
-    public function update(Request $request, Mentor $mentor)
-    {
         $validated = $request->validate([
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
-            'email' => 'required|email|unique:utilisateurs,email,' . $mentor->id,
-            'motDePasse' => 'nullable|string|min:8',
-            'telephone' => 'nullable|string',
+            'utilisateur_id' => 'required|exists:utilisateurs,id',
         ]);
 
         $mentor->update($validated);
-        return redirect()->route('mentors.index')->with('success', 'Mentor mis à jour avec succès.');
+
+        return response()->json($mentor);
     }
 
-    /**
-     * Supprime un mentor.
-     */
-    public function destroy(Mentor $mentor)
-    {
+    // Supprime un mentor
+    public function destroy($id){
+        $mentor = Mentor::find($id);
+        if (!$mentor) {
+            return response()->json(['message' => 'Mentor non trouvé'], 404);
+        }
+
         $mentor->delete();
-        return redirect()->route('mentors.index')->with('success', 'Mentor supprimé avec succès.');
+
+        return response()->json(['message' => 'Mentor supprimé avec succès']);
     }
+
 }

@@ -2,80 +2,70 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FichePresence;
+use App\Models\EtatFinancier;
 use Illuminate\Http\Request;
 
-class FichePresenceController extends Controller
+class EtatFinancierController extends Controller
 {
-    /**
-     * Affiche la liste des fiches de présence.
-     */
+    // Liste tous les états financiers
     public function index()
     {
-        $fichesPresence = FichePresence::all();
-        return view('fiches_presence.index', compact('fichesPresence'));
+        return response()->json(EtatFinancier::all());
     }
 
-    /**
-     * Affiche le formulaire de création d'une fiche de présence.
-     */
-    public function create()
+    // Affiche un état financier spécifique
+    public function show($id)
     {
-        return view('fiches_presence.create');
+        $etatFinancier = EtatFinancier::find($id);
+
+        if (!$etatFinancier) {
+            return response()->json(['message' => 'État financier non trouvé'], 404);
+        }
+
+        return response()->json($etatFinancier);
     }
 
-    /**
-     * Enregistre une nouvelle fiche de présence.
-     */
-    public function store(Request $request)
+    // Crée un nouvel état financier
+    public function create(Request $request)
     {
         $validated = $request->validate([
-            'dateHeureEntree' => 'required|datetime',
-            'carteIdentiteMentor' => 'required|string|max:255',
             'statut' => 'required|string|max:255',
         ]);
 
-        FichePresence::create($validated);
-        return redirect()->route('fiches_presence.index')->with('success', 'Fiche de présence créée avec succès.');
+        $etatFinancier = EtatFinancier::create($validated);
+
+        return response()->json($etatFinancier, 201);
     }
 
-    /**
-     * Affiche une fiche de présence spécifique.
-     */
-    public function show(FichePresence $fichePresence)
+    // Met à jour un état financier existant
+    public function update(Request $request, $id)
     {
-        return view('fiches_presence.show', compact('fichePresence'));
-    }
+        $etatFinancier = EtatFinancier::find($id);
 
-    /**
-     * Affiche le formulaire d'édition d'une fiche de présence.
-     */
-    public function edit(FichePresence $fichePresence)
-    {
-        return view('fiches_presence.edit', compact('fichePresence'));
-    }
+        if (!$etatFinancier) {
+            return response()->json(['message' => 'État financier non trouvé'], 404);
+        }
 
-    /**
-     * Met à jour une fiche de présence.
-     */
-    public function update(Request $request, FichePresence $fichePresence)
-    {
         $validated = $request->validate([
-            'dateHeureEntree' => 'required|datetime',
-            'carteIdentiteMentor' => 'required|string|max:255',
             'statut' => 'required|string|max:255',
         ]);
 
-        $fichePresence->update($validated);
-        return redirect()->route('fiches_presence.index')->with('success', 'Fiche de présence mise à jour avec succès.');
+        $etatFinancier->update($validated);
+
+        return response()->json($etatFinancier);
     }
 
-    /**
-     * Supprime une fiche de présence.
-     */
-    public function destroy(FichePresence $fichePresence)
+    // Supprime un état financier
+    public function destroy($id)
     {
-        $fichePresence->delete();
-        return redirect()->route('fiches_presence.index')->with('success', 'Fiche de présence supprimée avec succès.');
+        $etatFinancier = EtatFinancier::find($id);
+
+        if (!$etatFinancier) {
+            return response()->json(['message' => 'État financier non trouvé'], 404);
+        }
+
+        $etatFinancier->delete();
+
+        return response()->json(['message' => 'État financier supprimé avec succès']);
     }
 }

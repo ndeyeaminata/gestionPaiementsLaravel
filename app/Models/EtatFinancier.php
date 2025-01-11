@@ -9,6 +9,5 @@ class EtatFinancier extends Model
 {
     use HasFactory;
     protected $fillable = ['statut'];
-
     
 }

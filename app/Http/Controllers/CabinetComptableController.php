@@ -3,63 +3,80 @@
 namespace App\Http\Controllers;
 
 use App\Models\CabinetComptable;
+use App\Models\EtatFinancier;
 use Illuminate\Http\Request;
 
 class CabinetComptableController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Afficher la liste des cabinets comptables
     public function index()
     {
-        //
+        $cabinetsComptables = CabinetComptable::all();
+        return response()->json($cabinetsComptables);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Afficher un cabinet comptable spécifique
+    public function show($id)
     {
-        //
+        $cabinetComptable = CabinetComptable::find($id);
+        if (!$cabinetComptable) {
+            return response()->json(['message' => 'Cabinet comptable non trouvé'], 404);
+        }
+        return response()->json([
+            'message' => 'Cabinet comptable trouvé',
+            'cabinetComptable' => $cabinetComptable,
+        ]);
+    }
+    // Créer un cabinet comptable
+    public function store(Request $request, $id)
+    {
+        $request->validate([
+            'nomCabinet' => 'required|string|max:255',
+            'etatFinancier_id' => 'required|exists:etat_financiers,id',
+        ]);
+
+        $cabinetComptable = CabinetComptable::create([
+            'nomCabinet' => $request->nomCabinet,
+            'etatFinancier_id' => $request->etatFinancier_id,
+        ]);
+
+        return response()->json([
+            'message' => 'Cabinet comptable créé avec succès',
+            'cabinetComptable' => $cabinetComptable,
+        ],200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // Mettre à jour un cabinet comptable
+    public function update(Request $request, $id)
     {
-        //
+        $cabinetComptable = CabinetComptable::find($id);
+
+        $request->validate([
+            'nomCabinet' => 'required|string|max:255',
+            'etatFinancier_id' => 'required|exists:etat_financiers,id',
+        ]);
+
+        if(!$cabinetComptable) {
+            return response()->json(['message' => 'Cabinet comptable non trouvé'], 404);
+        }
+
+        $cabinetComptable->update([
+            'nomCabinet' => $request->input ('nomCabinet'),
+            'etatFinancier_id' => $request->input ('etatFinancier_id'),
+        ]);
+
+        return response()->json([
+            'message' => 'Cabinet comptable mis à jour avec succès',
+            'cabinetComptable' => $cabinetComptable,
+        ],200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(CabinetComptable $cabinetComptable)
+    // Supprimer un cabinet comptable
+    public function destroy($id)
     {
-        //
-    }
+        $cabinetComptable = CabinetComptable::findOrFail($id);
+        $cabinetComptable->delete();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CabinetComptable $cabinetComptable)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, CabinetComptable $cabinetComptable)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(CabinetComptable $cabinetComptable)
-    {
-        //
+        return response()->json(['message' => 'Cabinet comptable supprimé avec succès']);
     }
 }

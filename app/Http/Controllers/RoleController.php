@@ -7,59 +7,65 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Liste tous les rôles
     public function index()
     {
-        //
+        return response()->json(Role::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Affiche un rôle spécifique
+    public function show($id)
     {
-        //
+        $role = Role::find($id);
+
+        if (!$role) {
+            return response()->json(['message' => 'Rôle non trouvé'], 404);
+        }
+
+        return response()->json($role);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // Crée un nouveau rôle
+    public function create(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nomRole' => 'required|string|max:255|unique:roles,nomRole',
+        ]);
+
+        $role = Role::create($validated);
+
+        return response()->json($role, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Role $role)
+    // Met à jour un rôle existant
+    public function update(Request $request, $id)
     {
-        //
+        $role = Role::find($id);
+
+        if (!$role) {
+            return response()->json(['message' => 'Rôle non trouvé'], 404);
+        }
+
+        $validated = $request->validate([
+            'nomRole' => 'required|string|max:255|unique:roles,nomRole,' . $id,
+        ]);
+
+        $role->update($validated);
+
+        return response()->json($role);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Role $role)
+    // Supprime un rôle
+    public function destroy($id)
     {
-        //
-    }
+        $role = Role::find($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Role $role)
-    {
-        //
-    }
+        if (!$role) {
+            return response()->json(['message' => 'Rôle non trouvé'], 404);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Role $role)
-    {
-        //
+        $role->delete();
+
+        return response()->json(['message' => 'Rôle supprimé avec succès']);
     }
 }
