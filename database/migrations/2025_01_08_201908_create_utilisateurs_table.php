@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('utilisateurs', function (Blueprint $table) {
@@ -18,14 +15,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('telephone');
-            $table->foreignId('role_id')->constrained('roles');
+            $table->foreignId('role_id')->constrained('roles')->onDelete('cascade'); // Ajout de onDelete cascade
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('utilisateurs');

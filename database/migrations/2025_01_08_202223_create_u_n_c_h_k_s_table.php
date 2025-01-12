@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('u_n_c_h_k_s', function (Blueprint $table) {
@@ -16,14 +13,11 @@ return new class extends Migration
             $table->integer('montant');
             $table->date('date_soumission');
             $table->string('statut');
-            $table->foreignId('etatFinancier_id')->constrained('etat_financiers');
+            $table->foreignId('etatFinancier_id')->constrained('etat_financiers')->onDelete('cascade'); // Ajout de onDelete cascade
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('u_n_c_h_k_s');

@@ -2,70 +2,80 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\EtatFinancier;
+use App\Models\FichePresence; // Correction : Utiliser FichePresence au lieu de EtatFinancier
 use Illuminate\Http\Request;
 
-class EtatFinancierController extends Controller
+class FichePresenceController extends Controller
 {
-    // Liste tous les états financiers
+    // Liste toutes les fiches de présence
     public function index()
     {
-        return response()->json(EtatFinancier::all());
+        return response()->json(FichePresence::all(), 200); // Ajout du code de statut HTTP
     }
 
-    // Affiche un état financier spécifique
+    // Affiche une fiche de présence spécifique
     public function show($id)
     {
-        $etatFinancier = EtatFinancier::find($id);
+        $fichePresence = FichePresence::find($id);
 
-        if (!$etatFinancier) {
-            return response()->json(['message' => 'État financier non trouvé'], 404);
+        if (!$fichePresence) {
+            return response()->json(['message' => 'Fiche de présence non trouvée'], 404);
         }
 
-        return response()->json($etatFinancier);
+        return response()->json($fichePresence, 200); // Ajout du code de statut HTTP
     }
 
-    // Crée un nouvel état financier
-    public function create(Request $request)
+    // Crée une nouvelle fiche de présence
+    public function store(Request $request) // Correction : changer le nom de la méthode en store() pour suivre la convention REST
     {
         $validated = $request->validate([
+            'nombre_heures' => 'required|integer',
+            'certificat' => 'required|string',
+            'numero_groupe' => 'required|integer',
             'statut' => 'required|string|max:255',
+            'mentor_id' => 'required|integer|exists:mentors,id',
+            'consultant_id' => 'required|integer|exists:consultants,id',
         ]);
 
-        $etatFinancier = EtatFinancier::create($validated);
+        $fichePresence = FichePresence::create($validated);
 
-        return response()->json($etatFinancier, 201);
+        return response()->json($fichePresence, 201); // Ajout du code de statut HTTP 201 pour création
     }
 
-    // Met à jour un état financier existant
+    // Met à jour une fiche de présence existante
     public function update(Request $request, $id)
     {
-        $etatFinancier = EtatFinancier::find($id);
+        $fichePresence = FichePresence::find($id);
 
-        if (!$etatFinancier) {
-            return response()->json(['message' => 'État financier non trouvé'], 404);
+        if (!$fichePresence) {
+            return response()->json(['message' => 'Fiche de présence non trouvée'], 404);
         }
 
         $validated = $request->validate([
+            'nombre_heures' => 'required|integer',
+            'certificat' => 'required|string',
+            'numero_groupe' => 'required|integer',
             'statut' => 'required|string|max:255',
+            'mentor_id' => 'required|integer|exists:mentors,id',
+            'consultant_id' => 'required|integer|exists:consultants,id',
         ]);
 
-        $etatFinancier->update($validated);
+        $fichePresence->update($validated);
 
-        return response()->json($etatFinancier);
+        return response()->json($fichePresence, 200);
     }
 
-    // Supprime un état financier
+    // Supprime une fiche de présence
     public function destroy($id)
     {
-        $etatFinancier = EtatFinancier::find($id);
+        $fichePresence = FichePresence::find($id);
 
-        if (!$etatFinancier) {
-            return response()->json(['message' => 'État financier non trouvé'], 404);
+        if (!$fichePresence) {
+            return response()->json(['message' => 'Fiche de présence non trouvée'], 404);
         }
 
-        $etatFinancier->delete();
+        $fichePresence->delete();
 
-        return response()->json(['message' => 'État financier supprimé avec succès']);
+        return response()->json(['message' => 'Fiche de présence supprimée avec succès'], 200);
     }
 }

@@ -10,7 +10,7 @@ class MentorController extends Controller
     // Liste tous les mentors
     public function index()
     {
-        return response()->json(Mentor::with('utilisateur')->get());
+        return response()->json(Mentor::with('utilisateur')->get(), 200); // Ajout du code de statut HTTP
     }
 
     // Affiche un mentor spécifique
@@ -22,11 +22,11 @@ class MentorController extends Controller
             return response()->json(['message' => 'Mentor non trouvé'], 404);
         }
 
-        return response()->json($mentor);
+        return response()->json($mentor, 200); // Ajout du code de statut HTTP
     }
 
     // Crée un nouveau mentor
-    public function store(Request $request)
+    public function store(Request $request) // Correction : changer create() en store() pour suivre la convention REST
     {
         $validated = $request->validate([
             'utilisateur_id' => 'required|exists:utilisateurs,id',
@@ -34,7 +34,7 @@ class MentorController extends Controller
 
         $mentor = Mentor::create($validated);
 
-        return response()->json($mentor, 201);
+        return response()->json($mentor, 201); // Code de statut HTTP 201 pour création
     }
 
     // Met à jour un mentor existant
@@ -52,11 +52,12 @@ class MentorController extends Controller
 
         $mentor->update($validated);
 
-        return response()->json($mentor);
+        return response()->json($mentor, 200);
     }
 
     // Supprime un mentor
-    public function destroy($id){
+    public function destroy($id)
+    {
         $mentor = Mentor::find($id);
         if (!$mentor) {
             return response()->json(['message' => 'Mentor non trouvé'], 404);
@@ -64,7 +65,6 @@ class MentorController extends Controller
 
         $mentor->delete();
 
-        return response()->json(['message' => 'Mentor supprimé avec succès']);
+        return response()->json(['message' => 'Mentor supprimé avec succès'], 200);
     }
-
 }

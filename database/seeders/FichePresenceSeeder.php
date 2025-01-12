@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\FichePresence; // Correction : Importation correcte du modèle
 
 class FichePresenceSeeder extends Seeder
 {
@@ -13,24 +14,30 @@ class FichePresenceSeeder extends Seeder
     public function run(): void
     {
         FichePresence::create([
-            'dateHeureEntree' => '2025-01-01 08:00:00',
-            'carteIdentiteMentor' => '1', // Associez à un mentor existant
-            'nbreheure' => 8,
+            'nombre_heures' => 8,
+            'certificat' => 'Certificat PHP',
+            'numero_groupe' => 1,
             'statut' => 'validée',
+            'mentor_id' => 1,
+            'consultant_id' => 1,
         ]);
 
         FichePresence::create([
-            'dateHeureEntree' => '2025-01-02 09:00:00',
-            'carteIdentiteMentor' => '2',
-            'nbreheure' => 7,
+            'nombre_heures' => 7,
+            'certificat' => 'Certificat JAVA',
+            'numero_groupe' => 2,
             'statut' => 'en attente',
+            'mentor_id' => 2,
+            'consultant_id' => 2,
         ]);
 
         FichePresence::create([
-            'dateHeureEntree' => '2025-01-03 10:00:00',
-            'carteIdentiteMentor' => '3',
-            'nbreheure' => 6,
+            'nombre_heures' => 6,
+            'certificat' => 'Certificat PYTHON',
+            'numero_groupe' => 3,
             'statut' => 'rejetée',
+            'mentor_id' => 3,
+            'consultant_id' => 3,
         ]);
     }
 }

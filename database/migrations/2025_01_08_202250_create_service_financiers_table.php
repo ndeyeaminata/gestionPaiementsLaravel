@@ -6,22 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('service_financiers', function (Blueprint $table) {
             $table->id();
-            $table->string('nomService');
-            $table->foreignId('etantFinancier_id')->constrained('etat_financiers');
+            $table->string('nom'); // Correction : champ 'nom' au lieu de 'nomService'
+            $table->foreignId('etatFinancier_id')->constrained('etat_financiers')->onDelete('cascade'); // Correction : Nom correct du champ 'etatFinancier_id' et ajout de onDelete cascade
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('service_financiers');

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class UNCHK extends Model
 {
     use HasFactory;
+
     protected $fillable = ['montant', 'date_soumission', 'statut', 'etatFinancier_id'];
 
     public function etatFinancier(): BelongsTo

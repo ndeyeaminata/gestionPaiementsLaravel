@@ -2,117 +2,79 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Utilisateur;
+use App\Models\Administrateur;
 use Illuminate\Http\Request;
 
-class UtilisateurController extends Controller
+class AdministrateurController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Afficher tous les administrateurs
     public function index()
     {
-        
-        $administrateurs = Administrateur::all();
-        return response()->json($administrateurs);
+        $administrateurs = Administrateur::with('utilisateur', 'compte')->get();
+        return response()->json($administrateurs, 200); // Ajout du code de statut HTTP
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
+    // Créer un nouvel administrateur
+    public function store(Request $request) // Correction : utiliser store() pour suivre la convention REST
     {
-        $request = validate([
-           
+        $validated = $request->validate([
+            'utilisateur_id' => 'required|exists:utilisateurs,id',
+            'compte_id' => 'required|exists:comptes,id',
         ]);
 
-        $administrateur = Administrateur::create([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'email' => $request->email,
-            'password' => $request->password,
-            'telephone' => $request->telephone,
-        ]);
+        $administrateur = Administrateur::create($validated);
 
         return response()->json([
-            'message' => 'administrateur créé avec succès',
-            'administrateur' => $administrateur
-        ]);
+            'message' => 'Administrateur créé avec succès',
+            'administrateur' => $administrateur,
+        ], 201); // Code de statut HTTP 201 pour création
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Request $request, $id)
+    // Afficher un administrateur spécifique
+    public function show($id)
     {
-        $administrateur = administrateur::find($id);
-        return response()->json([
-            'message' => 'administrateur trouvé',
-            'administrateur' => $administrateur
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-   
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        $administrateur = administrateur::find($id);
+        $administrateur = Administrateur::with('utilisateur', 'compte')->find($id);
 
         if (!$administrateur) {
-            return response()->json([
-                'message' => 'administrateur non trouvé'
-            ], 404);
+            return response()->json(['message' => 'Administrateur non trouvé'], 404);
         }
 
-        $request = validate([
-            'nom' => 'required||string',
-            'prenom' => 'required||string',
-            'email' => 'required||string',
-            'password' => 'required||string',
-            'telephone' => 'required||string',
-        ]);
-
-        $administrateur = administrateur::update([
-            'nom' => $request->input ('nom'),
-            'prenom' => $request->input ('prenom'),
-            'email' => $request->input ('email'),
-            'password' => $request->input ('password'),
-            'telephone' => $request->input ('telephone'),
-        ]);
-        
-        return response()->json([
-            'message' => 'administrateur mis à jour avec succès',
-            'administrateur' => $administrateur
-        ]);
+        return response()->json($administrateur, 200); // Ajout du code de statut HTTP
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // Mettre à jour un administrateur existant
+    public function update(Request $request, $id)
+    {
+        $administrateur = Administrateur::find($id);
+
+        if (!$administrateur) {
+            return response()->json(['message' => 'Administrateur non trouvé'], 404);
+        }
+
+        $validated = $request->validate([
+            'utilisateur_id' => 'required|exists:utilisateurs,id',
+            'compte_id' => 'required|exists:comptes,id',
+        ]);
+
+        $administrateur->update($validated);
+
+        return response()->json([
+            'message' => 'Administrateur mis à jour avec succès',
+            'administrateur' => $administrateur,
+        ], 200);
+    }
+
+    // Supprimer un administrateur
     public function destroy($id)
     {
-        $administrateur = administrateur::find($id);
-        if(!$administrateur) {
-            return response()->json([
-                'message' => 'administrateur non trouvé'
-            ], 404);
+        $administrateur = Administrateur::find($id);
+
+        if (!$administrateur) {
+            return response()->json(['message' => 'Administrateur non trouvé'], 404);
         }
 
         $administrateur->delete();
-        return response()->json([
-            'message' => 'administrateur supprimé avec succès'
-        ]);
-    }
 
-    
+        return response()->json(['message' => 'Administrateur supprimé avec succès'], 200);
+    }
 }

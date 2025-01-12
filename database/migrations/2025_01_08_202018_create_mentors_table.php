@@ -9,11 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    //Ajout de onDelete('cascade')pour garantir que la suppression d'un Utilisateursupprimé également l' Mentorassocié.
+    
     public function up(): void
     {
         Schema::create('mentors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('utilisateur_id')->constrained('utilisateurs');
+            $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade'); // Ajout de onDelete cascade
             $table->timestamps();
         });
     }

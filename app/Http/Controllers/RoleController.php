@@ -10,7 +10,7 @@ class RoleController extends Controller
     // Liste tous les rôles
     public function index()
     {
-        return response()->json(Role::all());
+        return response()->json(Role::all(), 200); // Ajout du code de statut HTTP
     }
 
     // Affiche un rôle spécifique
@@ -22,11 +22,11 @@ class RoleController extends Controller
             return response()->json(['message' => 'Rôle non trouvé'], 404);
         }
 
-        return response()->json($role);
+        return response()->json($role, 200); // Ajout du code de statut HTTP
     }
 
     // Crée un nouveau rôle
-    public function create(Request $request)
+    public function store(Request $request) // Correction : changer create() en store() pour suivre la convention REST
     {
         $validated = $request->validate([
             'nomRole' => 'required|string|max:255|unique:roles,nomRole',
@@ -34,7 +34,7 @@ class RoleController extends Controller
 
         $role = Role::create($validated);
 
-        return response()->json($role, 201);
+        return response()->json($role, 201); // Code de statut HTTP 201 pour création
     }
 
     // Met à jour un rôle existant
@@ -52,7 +52,7 @@ class RoleController extends Controller
 
         $role->update($validated);
 
-        return response()->json($role);
+        return response()->json($role, 200);
     }
 
     // Supprime un rôle
@@ -66,6 +66,6 @@ class RoleController extends Controller
 
         $role->delete();
 
-        return response()->json(['message' => 'Rôle supprimé avec succès']);
+        return response()->json(['message' => 'Rôle supprimé avec succès'], 200);
     }
 }

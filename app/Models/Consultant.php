@@ -9,12 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Consultant extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'utilisateur_id'
-    ];
+
+    protected $fillable = ['utilisateur_id'];
 
     public function utilisateur(): BelongsTo
     {
-        return $this->belongsTo(Utilisateur::class);
+        return $this->belongsTo(Utilisateur::class, 'utilisateur_id');
     }
 }

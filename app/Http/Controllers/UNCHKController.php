@@ -10,7 +10,7 @@ class UNCHKController extends Controller
     // Liste tous les UNCHK
     public function index()
     {
-        return response()->json(UNCHK::with('etatFinancier')->get());
+        return response()->json(UNCHK::with('etatFinancier')->get(), 200); // Ajout du code de statut HTTP
     }
 
     // Affiche un UNCHK spécifique
@@ -22,11 +22,11 @@ class UNCHKController extends Controller
             return response()->json(['message' => 'UNCHK non trouvé'], 404);
         }
 
-        return response()->json($unchk);
+        return response()->json($unchk, 200); // Ajout du code de statut HTTP
     }
 
     // Crée un nouveau UNCHK
-    public function create(Request $request)
+    public function store(Request $request) // Correction : utiliser store() pour suivre la convention REST
     {
         $validated = $request->validate([
             'montant' => 'required|numeric',
@@ -37,7 +37,7 @@ class UNCHKController extends Controller
 
         $unchk = UNCHK::create($validated);
 
-        return response()->json($unchk, 201);
+        return response()->json($unchk, 201); // Code de statut HTTP 201 pour création
     }
 
     // Met à jour un UNCHK existant
@@ -58,7 +58,7 @@ class UNCHKController extends Controller
 
         $unchk->update($validated);
 
-        return response()->json($unchk);
+        return response()->json($unchk, 200);
     }
 
     // Supprime un UNCHK
@@ -72,6 +72,6 @@ class UNCHKController extends Controller
 
         $unchk->delete();
 
-        return response()->json(['message' => 'UNCHK supprimé avec succès']);
+        return response()->json(['message' => 'UNCHK supprimé avec succès'], 200);
     }
 }

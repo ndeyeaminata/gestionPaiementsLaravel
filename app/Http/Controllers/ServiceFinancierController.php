@@ -10,7 +10,7 @@ class ServiceFinancierController extends Controller
     // Liste tous les services financiers
     public function index()
     {
-        return response()->json(ServiceFinancier::with('etatFinancier')->get());
+        return response()->json(ServiceFinancier::with('etatFinancier')->get(), 200); // Ajout du code de statut HTTP
     }
 
     // Affiche un service financier spécifique
@@ -22,11 +22,11 @@ class ServiceFinancierController extends Controller
             return response()->json(['message' => 'Service financier non trouvé'], 404);
         }
 
-        return response()->json($serviceFinancier);
+        return response()->json($serviceFinancier, 200); // Ajout du code de statut HTTP
     }
 
     // Crée un nouveau service financier
-    public function create(Request $request)
+    public function store(Request $request) // Correction : utiliser store() pour suivre la convention REST
     {
         $validated = $request->validate([
             'nom' => 'required|string|max:255',
@@ -35,7 +35,7 @@ class ServiceFinancierController extends Controller
 
         $serviceFinancier = ServiceFinancier::create($validated);
 
-        return response()->json($serviceFinancier, 201);
+        return response()->json($serviceFinancier, 201); // Code de statut HTTP 201 pour création
     }
 
     // Met à jour un service financier existant
@@ -54,7 +54,7 @@ class ServiceFinancierController extends Controller
 
         $serviceFinancier->update($validated);
 
-        return response()->json($serviceFinancier);
+        return response()->json($serviceFinancier, 200);
     }
 
     // Supprime un service financier
@@ -68,6 +68,6 @@ class ServiceFinancierController extends Controller
 
         $serviceFinancier->delete();
 
-        return response()->json(['message' => 'Service financier supprimé avec succès']);
+        return response()->json(['message' => 'Service financier supprimé avec succès'], 200);
     }
 }

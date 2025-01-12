@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('etat_financiers', function (Blueprint $table) {
             $table->id();
-            $table->boolean('statut')->default(false);
+            $table->string('statut'); // Correction : Utiliser string au lieu de boolean pour le champ statut
             $table->timestamps();
         });
     }

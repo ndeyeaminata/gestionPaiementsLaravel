@@ -2,38 +2,27 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Mentor; // Correction : Importation correcte du modèle
 
 class MentorSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
+    //Les données de seeders doivent correspondre à la table mentors. Ici, on suppose que des Utilisateurexistent déjà avec les ID correspondants.
     public function run(): void
     {
         Mentor::create([
-            'nom' => 'OUEDRAOGO',
-            'prenom' => 'ISSIAKA',
-            'email' => 'issi1@gmail.com',
-            'motDePasse' => bcrypt('123ABC'),
-            'telephone' => '123456789',
+            'utilisateur_id' => 1,
         ]);
 
         Mentor::create([
-            'nom' => 'AMINA',
-            'prenom' => 'SARR',
-            'email' => 'aminasarr@gmail.com',
-            'motDePasse' => bcrypt('123ABC'),
-            'telephone' => '987654321',
+            'utilisateur_id' => 2,
         ]);
 
         Mentor::create([
-            'nom' => 'Ciscoder',
-            'prenom' => 'Marieme',
-            'email' => 'ciscoder@example.com',
-            'motDePasse' => bcrypt('123ABC'),
-            'telephone' => '456789123',
+            'utilisateur_id' => 3,
         ]);
     }
 }

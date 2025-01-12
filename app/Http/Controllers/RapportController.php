@@ -10,7 +10,7 @@ class RapportController extends Controller
     // Liste tous les rapports
     public function index()
     {
-        return response()->json(Rapport::with('consultant')->get());
+        return response()->json(Rapport::with('consultant')->get(), 200); // Ajout du code de statut HTTP
     }
 
     // Affiche un rapport spécifique
@@ -22,11 +22,11 @@ class RapportController extends Controller
             return response()->json(['message' => 'Rapport non trouvé'], 404);
         }
 
-        return response()->json($rapport);
+        return response()->json($rapport, 200); // Ajout du code de statut HTTP
     }
 
     // Crée un nouveau rapport
-    public function create(Request $request)
+    public function store(Request $request) // Correction : utiliser store() pour suivre la convention REST
     {
         $validated = $request->validate([
             'date_soumission' => 'required|date',
@@ -37,7 +37,7 @@ class RapportController extends Controller
 
         $rapport = Rapport::create($validated);
 
-        return response()->json($rapport, 201);
+        return response()->json($rapport, 201); // Code de statut HTTP 201 pour création
     }
 
     // Met à jour un rapport existant
@@ -58,7 +58,7 @@ class RapportController extends Controller
 
         $rapport->update($validated);
 
-        return response()->json($rapport);
+        return response()->json($rapport, 200);
     }
 
     // Supprime un rapport
@@ -72,6 +72,6 @@ class RapportController extends Controller
 
         $rapport->delete();
 
-        return response()->json(['message' => 'Rapport supprimé avec succès']);
+        return response()->json(['message' => 'Rapport supprimé avec succès'], 200);
     }
 }

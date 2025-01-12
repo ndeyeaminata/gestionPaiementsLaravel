@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\EtatFinancier; // Correction : Importation correcte du modèle
 
 class EtatFinancierSeeder extends Seeder
 {
@@ -12,16 +12,8 @@ class EtatFinancierSeeder extends Seeder
      */
     public function run(): void
     {
-        EtatFinancier::create([
-            'statut' => 'signé',
-        ]);
-
-        EtatFinancier::create([
-            'statut' => 'non signé',
-        ]);
-
-        EtatFinancier::create([
-            'statut' => 'en attente',
-        ]);
+        EtatFinancier::create(['statut' => 'signé']);
+        EtatFinancier::create(['statut' => 'non signé']);
+        EtatFinancier::create(['statut' => 'en attente']);
     }
 }

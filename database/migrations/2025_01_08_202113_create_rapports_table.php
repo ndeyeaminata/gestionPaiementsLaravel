@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('rapports', function (Blueprint $table) {
@@ -16,14 +13,11 @@ return new class extends Migration
             $table->date('date_soumission');
             $table->string('detail_rapport');
             $table->string('statut');
-            $table->foreignId('consultant_id')->constrained('consultants');
+            $table->foreignId('consultant_id')->constrained('consultants')->onDelete('cascade'); // Ajout de onDelete cascade
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('rapports');

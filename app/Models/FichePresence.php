@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo; // Correction : Importation de la classe BelongsTo
 
 class FichePresence extends Model
 {
     use HasFactory;
+    
     protected $fillable = [
         'nombre_heures',
         'certificat',

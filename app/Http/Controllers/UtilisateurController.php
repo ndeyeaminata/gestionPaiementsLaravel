@@ -4,143 +4,112 @@ namespace App\Http\Controllers;
 
 use App\Models\Utilisateur;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash; // Ajout pour le hachage du mot de passe
 
 class UtilisateurController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Liste tous les utilisateurs
     public function index()
     {
-        
         $utilisateurs = Utilisateur::all();
-        return response()->json($utilisateurs);
+        return response()->json($utilisateurs, 200); // Ajout du code de statut HTTP
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
+    // Crée un nouvel utilisateur
+    public function store(Request $request) // Correction : changer create() en store() pour suivre la convention REST
     {
-        $request = validate([
-            'nom' => 'required||string',
-            'prenom' => 'required||string',
-            'email' => 'required||string',
-            'password' => 'required||string',
-            'telephone' => 'required||string',
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'email' => 'required|email|unique:utilisateurs,email',
+            'password' => 'required|string|min:8',
+            'telephone' => 'required|string|max:15',
+            'role_id' => 'required|exists:roles,id',
         ]);
 
-        $utilisateur = Utilisateur::create([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'email' => $request->email,
-            'password' => $request->password,
-            'telephone' => $request->telephone,
-        ]);
+        $validated['password'] = Hash::make($validated['password']); // Hachage du mot de passe
+
+        $utilisateur = Utilisateur::create($validated);
 
         return response()->json([
             'message' => 'Utilisateur créé avec succès',
             'utilisateur' => $utilisateur
-        ]);
+        ], 201); // Code de statut HTTP 201 pour création
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Request $request, $id)
+    // Affiche un utilisateur spécifique
+    public function show($id)
     {
         $utilisateur = Utilisateur::find($id);
-        return response()->json([
-            'message' => 'Utilisateur trouvé',
-            'utilisateur' => $utilisateur
-        ]);
+
+        if (!$utilisateur) {
+            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
+        }
+
+        return response()->json($utilisateur, 200); // Ajout du code de statut HTTP
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-   
-    /**
-     * Update the specified resource in storage.
-     */
+    // Met à jour un utilisateur existant
     public function update(Request $request, $id)
     {
         $utilisateur = Utilisateur::find($id);
 
         if (!$utilisateur) {
-            return response()->json([
-                'message' => 'Utilisateur non trouvé'
-            ], 404);
+            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
         }
 
-        $request = validate([
-            'nom' => 'required||string',
-            'prenom' => 'required||string',
-            'email' => 'required||string',
-            'password' => 'required||string',
-            'telephone' => 'required||string',
+        $validated = $request->validate([
+            'nom' => 'sometimes|required|string|max:255',
+            'prenom' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|unique:utilisateurs,email,' . $id,
+            'password' => 'sometimes|required|string|min:8',
+            'telephone' => 'sometimes|required|string|max:15',
+            'role_id' => 'sometimes|required|exists:roles,id',
         ]);
 
-        $utilisateur = Utilisateur::update([
-            'nom' => $request->input ('nom'),
-            'prenom' => $request->input ('prenom'),
-            'email' => $request->input ('email'),
-            'password' => $request->input ('password'),
-            'telephone' => $request->input ('telephone'),
-        ]);
-        
+        if (isset($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']); // Hachage du mot de passe
+        }
+
+        $utilisateur->update($validated);
+
         return response()->json([
             'message' => 'Utilisateur mis à jour avec succès',
             'utilisateur' => $utilisateur
-        ]);
+        ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // Supprime un utilisateur
     public function destroy($id)
     {
         $utilisateur = Utilisateur::find($id);
-        if(!$utilisateur) {
-            return response()->json([
-                'message' => 'Utilisateur non trouvé'
-            ], 404);
+
+        if (!$utilisateur) {
+            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
         }
 
         $utilisateur->delete();
-        return response()->json([
-            'message' => 'Utilisateur supprimé avec succès'
-        ]);
+
+        return response()->json(['message' => 'Utilisateur supprimé avec succès'], 200);
     }
 
-    public function authentifier(Request $request){
-       
-        $request = validate([
-            'email' => 'required||string',
-            'password' => 'required||string',
+    // Authentifie un utilisateur
+    public function authentifier(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
         ]);
 
-       
-        if(!$utilisateur){
-            return response()->json([
-                'message' => 'Utilisateur non trouvé'
-            ], 404);
+        $utilisateur = Utilisateur::where('email', $validated['email'])->first();
+
+        if (!$utilisateur || !Hash::check($validated['password'], $utilisateur->password)) {
+            return response()->json(['message' => 'Les informations d\'identification sont incorrectes'], 401);
         }
 
-        $utilisateur = Utilisateur::where('email', $request->email)->first();
-        if($utilisateur->password !== $request->password){
-            return response()->json([
-                'message' => 'Mot de passe incorrect'
-            ], 401);
-        }
         return response()->json([
             'message' => 'Utilisateur authentifié avec succès',
             'utilisateur' => $utilisateur
-        ]);
+        ], 200);
     }
 }

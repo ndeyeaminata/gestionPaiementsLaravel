@@ -10,7 +10,7 @@ class EtatFinancierController extends Controller
     // Liste tous les états financiers
     public function index()
     {
-        return response()->json(EtatFinancier::all());
+        return response()->json(EtatFinancier::all(), 200); // Ajout du code de statut HTTP
     }
 
     // Affiche un état financier spécifique
@@ -22,11 +22,11 @@ class EtatFinancierController extends Controller
             return response()->json(['message' => 'État financier non trouvé'], 404);
         }
 
-        return response()->json($etatFinancier);
+        return response()->json($etatFinancier, 200); // Ajout du code de statut HTTP
     }
 
     // Crée un nouvel état financier
-    public function create(Request $request)
+    public function store(Request $request) // Correction : remplacer create() par store() pour suivre la convention REST
     {
         $validated = $request->validate([
             'statut' => 'required|string|max:255',
@@ -34,7 +34,7 @@ class EtatFinancierController extends Controller
 
         $etatFinancier = EtatFinancier::create($validated);
 
-        return response()->json($etatFinancier, 201);
+        return response()->json($etatFinancier, 201); // Code de statut HTTP 201 pour création
     }
 
     // Met à jour un état financier existant
@@ -52,7 +52,7 @@ class EtatFinancierController extends Controller
 
         $etatFinancier->update($validated);
 
-        return response()->json($etatFinancier);
+        return response()->json($etatFinancier, 200);
     }
 
     // Supprime un état financier
@@ -66,6 +66,6 @@ class EtatFinancierController extends Controller
 
         $etatFinancier->delete();
 
-        return response()->json(['message' => 'État financier supprimé avec succès']);
+        return response()->json(['message' => 'État financier supprimé avec succès'], 200);
     }
 }
