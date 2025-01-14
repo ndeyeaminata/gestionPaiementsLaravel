@@ -12,16 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fiche_presences', function (Blueprint $table) {
-            $table->id();
+            $table->id();  // Cela crée la colonne 'id' comme clé primaire
+            $table->foreignId('mentor_id')->constrained();
+            $table->foreignId('consultant_id')->constrained();
             $table->integer('nombre_heures');
             $table->string('certificat');
-            $table->integer('numero_groupe');	
+            $table->integer('numero_groupe');
             $table->string('statut');
-            $table->foreignId('mentor_id')->constrained('mentors');
-            $table->foreignId('consultant_id')->constrained('consultants');
             $table->timestamps();
         });
+        
     }
+
+
+    
 
     /**
      * Reverse the migrations.
