@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('administrateurs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('utilisateur_id')->constrained('utilisateurs');
-            $table->foreignId('compte_id')->constrained('comptes');
+            // Définir les relations avec les autres tables (utilisateur et compte)
+            $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
+            $table->foreignId('compte_id')->constrained('comptes')->onDelete('cascade');
+            
+            $table->string('role')->nullable();
             $table->timestamps();
         });
     }

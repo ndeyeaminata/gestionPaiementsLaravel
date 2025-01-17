@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\EtatFinancier;
+use App\Models\FichePresence;
 use Illuminate\Http\Request;
 
-class EtatFinancierController extends Controller
+class FichePresenceController extends Controller
 {
     // Liste tous les états financiers
     public function index()

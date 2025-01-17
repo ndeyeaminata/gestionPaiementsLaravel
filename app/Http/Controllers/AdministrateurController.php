@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Utilisateur;
+use App\Models\Administrateur;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
-class UtilisateurController extends Controller
+class AdministrateurController extends Controller
 {
     /**
      * Display a listing of the resource.
