@@ -26,7 +26,7 @@ class MentorController extends Controller
     }
 
     // Crée un nouveau mentor
-    public function store(Request $request)
+    public function create(Request $request)
     {
         $validated = $request->validate([
             'utilisateur_id' => 'required|exists:utilisateurs,id',

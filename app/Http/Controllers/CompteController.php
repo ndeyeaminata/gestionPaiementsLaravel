@@ -28,7 +28,7 @@ class CompteController extends Controller
     }
 
     // Créer un nouveau compte
-    public function store(Request $request, $id)
+    public function create(Request $request, $id)
     {
         $request = validate([
             'email' => 'required|email|unique:comptes,email',

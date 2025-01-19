@@ -24,7 +24,7 @@ class ConsultantController extends Controller
     }
 
     // Crée un nouveau consultant
-    public function store(Request $request)
+    public function create(Request $request)
     {
         $validated = $request->validate([
             'utilisateur_id' => 'required|exists:utilisateurs,id',

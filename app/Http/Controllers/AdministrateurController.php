@@ -24,7 +24,11 @@ class AdministrateurController extends Controller
     public function create(Request $request)
     {
         $request = validate([
-           
+           'nom' => 'required|string',
+           'prenom' => 'required|string',
+           'email' => 'required|string|email',
+           'password' => 'required|string',
+           'telephone' => 'required|string',
         ]);
 
         $administrateur = Administrateur::create([
@@ -52,6 +56,12 @@ class AdministrateurController extends Controller
     public function show(Request $request, $id)
     {
         $administrateur = administrateur::find($id);
+        
+        if (!$administrateur) {
+            return response()->json([
+                'message' => 'administrateur non trouvé'
+            ], 404);
+        }
         return response()->json([
             'message' => 'administrateur trouvé',
             'administrateur' => $administrateur
@@ -76,11 +86,11 @@ class AdministrateurController extends Controller
         }
 
         $request = validate([
-            'nom' => 'required||string',
-            'prenom' => 'required||string',
-            'email' => 'required||string',
-            'password' => 'required||string',
-            'telephone' => 'required||string',
+            'nom' => 'required|string',
+            'prenom' => 'required|string',
+            'email' => 'required|string',
+            'password' => 'required|string',
+            'telephone' => 'required|string',
         ]);
 
         $administrateur = administrateur::update([

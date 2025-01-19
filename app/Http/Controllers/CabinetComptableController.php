@@ -28,7 +28,7 @@ class CabinetComptableController extends Controller
         ]);
     }
     // Créer un cabinet comptable
-    public function store(Request $request, $id)
+    public function create(Request $request, $id)
     {
         $request->validate([
             'nomCabinet' => 'required|string|max:255',
