@@ -22,7 +22,10 @@ class MentorController extends Controller
             return response()->json(['message' => 'Mentor non trouvé'], 404);
         }
 
-        return response()->json($mentor);
+        return response()->json([
+            'message' => 'Mentor trouvé',
+            'mentor' => $mentor,
+        ],201);
     }
 
     // Crée un nouveau mentor
@@ -34,7 +37,10 @@ class MentorController extends Controller
 
         $mentor = Mentor::create($validated);
 
-        return response()->json($mentor, 201);
+        return response()->json([
+            'message' => 'Mentor créé avec succès',
+            'mentor' => $mentor,
+        ],201);
     }
 
     // Met à jour un mentor existant
@@ -52,7 +58,10 @@ class MentorController extends Controller
 
         $mentor->update($validated);
 
-        return response()->json($mentor);
+        return response()->json([
+            'message' => 'Mentor mis à jour avec succès',
+            'mentor' => $mentor,
+        ],201);
     }
 
     // Supprime un mentor
@@ -64,7 +73,7 @@ class MentorController extends Controller
 
         $mentor->delete();
 
-        return response()->json(['message' => 'Mentor supprimé avec succès']);
+        return response()->json(['message' => 'Mentor supprimé avec succès'],201);
     }
 
 }

@@ -13,15 +13,25 @@ class Utilisateur extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $fillable = ['nom', 'prenom', 'email', 'password', 'telephone', 'role_id'];
+    protected $table = 'utilisateurs'; // Indique la table utilisée
 
-    // Hashage du mot de passe avant de l'enregistrer (assurez-vous que le mot de passe est bien sécurisé)
+    protected $fillable = ['nom', 'prenom', 'email', 'password', 'telephone'];
+
+    protected $hidden = ['password', 'remember_token'];
+
+    // Hashage du mot de passe
     protected static function boot()
     {
         parent::boot();
 
         static::creating(function ($user) {
-            if ($user->password) {
+            if ($user->password && !password_get_info($user->password)['algo']) {
+                $user->password = bcrypt($user->password);
+            }
+        });
+
+        static::updating(function ($user) {
+            if ($user->password && !password_get_info($user->password)['algo']) {
                 $user->password = bcrypt($user->password);
             }
         });

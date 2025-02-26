@@ -10,7 +10,11 @@ class RoleController extends Controller
     // Liste tous les rôles
     public function index()
     {
-        return response()->json(Role::all());
+        $roles = Role::all();
+        return response()->json([
+            'message' => 'Liste des rôles',
+            'roles' => $roles,
+        ],201);
     }
 
     // Affiche un rôle spécifique
@@ -22,7 +26,12 @@ class RoleController extends Controller
             return response()->json(['message' => 'Rôle non trouvé'], 404);
         }
 
-        return response()->json($role);
+        return response()->json(
+            [
+                'message' => 'Rôle trouvé',
+                'role' => $role,
+            ],201
+        );
     }
 
     // Crée un nouveau rôle
@@ -34,7 +43,10 @@ class RoleController extends Controller
 
         $role = Role::create($validated);
 
-        return response()->json($role, 201);
+        return response()->json([
+            'message' => 'Rôle créé avec succès',
+            'role' => $role,
+        ],201);
     }
 
     // Met à jour un rôle existant
@@ -52,7 +64,10 @@ class RoleController extends Controller
 
         $role->update($validated);
 
-        return response()->json($role);
+        return response()->json([
+            'message' => 'Rôle mis à jour avec succès',
+            'role' => $role,
+        ],201);
     }
 
     // Supprime un rôle
@@ -66,6 +81,6 @@ class RoleController extends Controller
 
         $role->delete();
 
-        return response()->json(['message' => 'Rôle supprimé avec succès']);
+        return response()->json(['message' => 'Rôle supprimé avec succès'],201);
     }
 }

@@ -22,7 +22,10 @@ class EtatFinancierController extends Controller
             return response()->json(['message' => 'État financier non trouvé'], 404);
         }
 
-        return response()->json($etatFinancier);
+        return response()->json([
+            'message' => 'État financier trouvé',
+            'etatFinancier' => $etatFinancier,
+        ],201);
     }
 
     // Crée un nouvel état financier
@@ -34,7 +37,10 @@ class EtatFinancierController extends Controller
 
         $etatFinancier = EtatFinancier::create($validated);
 
-        return response()->json($etatFinancier, 201);
+        return response()->json([
+            'message' => 'État financier créé avec succès',
+            'etatFinancier' => $etatFinancier,
+        ],201);
     }
 
     // Met à jour un état financier existant
@@ -52,7 +58,10 @@ class EtatFinancierController extends Controller
 
         $etatFinancier->update($validated);
 
-        return response()->json($etatFinancier);
+        return response()->json([
+            'message' => 'État financier mis à jour avec succès',
+            'etatFinancier' => $etatFinancier,
+        ],201);
     }
 
     // Supprime un état financier
@@ -66,6 +75,6 @@ class EtatFinancierController extends Controller
 
         $etatFinancier->delete();
 
-        return response()->json(['message' => 'État financier supprimé avec succès']);
+        return response()->json(['message' => 'État financier supprimé avec succès'],201);
     }
 }

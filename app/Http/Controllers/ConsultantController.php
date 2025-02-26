@@ -20,7 +20,10 @@ class ConsultantController extends Controller
         if (!$consultant) {
             return response()->json(['message' => 'Consultant non trouvé'], 404);
         }
-        return response()->json($consultant);
+        return response()->json([
+            'message' => 'Consultant trouvé',
+            'consultant' => $consultant,
+        ],201);
     }
 
     // Crée un nouveau consultant
@@ -31,7 +34,10 @@ class ConsultantController extends Controller
         ]);
 
         $consultant = Consultant::create($validated);
-        return response()->json($consultant, 201);
+        return response()->json([
+            'message' => 'Consultant créé avec succès',
+            'consultant' => $consultant,
+        ],201);
     }
 
     // Met à jour un consultant existant
@@ -47,7 +53,10 @@ class ConsultantController extends Controller
         ]);
 
         $consultant->update($validated);
-        return response()->json($consultant);
+        return response()->json([
+            'message' => 'Consultant mis à jour avec succès',
+            'consultant' => $consultant,
+        ],201);
     }
 
     // Supprime un consultant
@@ -59,6 +68,6 @@ class ConsultantController extends Controller
         }
 
         $consultant->delete();
-        return response()->json(['message' => 'Consultant supprimé avec succès']);
+        return response()->json(['message' => 'Consultant supprimé avec succès'],201);
     }
 }

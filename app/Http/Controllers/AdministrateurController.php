@@ -4,126 +4,69 @@ namespace App\Http\Controllers;
 
 use App\Models\Administrateur;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class AdministrateurController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Liste des administrateurs
     public function index()
     {
-        
-        $administrateurs = Administrateur::all();
-        return response()->json($administrateurs);
+        $administrateurs = Administrateur::with('utilisateur', 'compte')->get();
+        return response()->json([
+            'message' => 'Liste des administrateurs',
+            'administrateurs' => $administrateurs,
+        ],201);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Créer un administrateur
     public function create(Request $request)
     {
-        $request = validate([
-           'nom' => 'required|string',
-           'prenom' => 'required|string',
-           'email' => 'required|string|email',
-           'password' => 'required|string',
-           'telephone' => 'required|string',
+        $validated = $request->validate([
+            'utilisateur_id' => 'required|exists:utilisateurs,id',
+            'compte_id' => 'required|exists:comptes,id',
+            'role' => 'nullable|string|max:255',
         ]);
 
-        $administrateur = Administrateur::create([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'email' => $request->email,
-            'password' => $request->password,
-            'telephone' => $request->telephone,
-        ]);
-
+        $administrateur = Administrateur::create($validated);
         return response()->json([
-            'message' => 'administrateur créé avec succès',
-            'administrateur' => $administrateur
-        ]);
+            'message' => 'Administrateur créé avec succès',
+            'administrateur' => $administrateur,
+        ],201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Request $request, $id)
+    // Afficher un administrateur spécifique
+    public function show($id)
     {
-        $administrateur = administrateur::find($id);
-        
-        if (!$administrateur) {
-            return response()->json([
-                'message' => 'administrateur non trouvé'
-            ], 404);
-        }
+        $administrateur = Administrateur::with('utilisateur', 'compte')->findOrFail($id);
         return response()->json([
-            'message' => 'administrateur trouvé',
-            'administrateur' => $administrateur
-        ]);
+            'message' => 'Administrateur trouvé',
+            'administrateur' => $administrateur,
+        ],201);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-   
-    /**
-     * Update the specified resource in storage.
-     */
+    // Mettre à jour un administrateur
     public function update(Request $request, $id)
     {
-        $administrateur = administrateur::find($id);
+        $administrateur = Administrateur::findOrFail($id);
 
-        if (!$administrateur) {
-            return response()->json([
-                'message' => 'administrateur non trouvé'
-            ], 404);
-        }
-
-        $request = validate([
-            'nom' => 'required|string',
-            'prenom' => 'required|string',
-            'email' => 'required|string',
-            'password' => 'required|string',
-            'telephone' => 'required|string',
+        $validated = $request->validate([
+            'utilisateur_id' => 'required|exists:utilisateurs,id',
+            'compte_id' => 'required|exists:comptes,id',
+            'role' => 'nullable|string|max:255',
         ]);
 
-        $administrateur = administrateur::update([
-            'nom' => $request->input ('nom'),
-            'prenom' => $request->input ('prenom'),
-            'email' => $request->input ('email'),
-            'password' => $request->input ('password'),
-            'telephone' => $request->input ('telephone'),
-        ]);
-        
+        $administrateur->update($validated);
+
         return response()->json([
-            'message' => 'administrateur mis à jour avec succès',
-            'administrateur' => $administrateur
-        ]);
+            'message' => 'Administrateur mis à jour avec succès',
+            'administrateur' => $administrateur,
+        ],201);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // Supprimer un administrateur
     public function destroy($id)
     {
-        $administrateur = administrateur::find($id);
-        if(!$administrateur) {
-            return response()->json([
-                'message' => 'administrateur non trouvé'
-            ], 404);
-        }
-
+        $administrateur = Administrateur::findOrFail($id);
         $administrateur->delete();
-        return response()->json([
-            'message' => 'administrateur supprimé avec succès'
-        ]);
+        return response()->json(['message' => 'Administrateur supprimé avec succès.'],201);
     }
-
-    
 }

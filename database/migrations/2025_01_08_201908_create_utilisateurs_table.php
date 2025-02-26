@@ -8,7 +8,6 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     * 
      */
     public function up(): void
     {
@@ -16,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('nom');
             $table->string('prenom');
-            $table->string('email');
+            $table->string('email')->unique(); // Ajoute une contrainte unique pour les emails
             $table->string('password');
             $table->string('telephone');
-            $table->foreignId('role_id')->constrained('roles');
+            $table->rememberToken(); // Ajoute la colonne remember_token
             $table->timestamps();
         });
     }

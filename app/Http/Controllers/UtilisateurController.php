@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\Utilisateur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
 
 
 class UtilisateurController extends Controller
@@ -42,7 +44,7 @@ class UtilisateurController extends Controller
     return response()->json([
         'message' => 'Utilisateur créé avec succès',
         'utilisateur' => $utilisateur
-    ]);
+    ],201);
 }
 
 
@@ -57,11 +59,18 @@ class UtilisateurController extends Controller
      */
     public function show(Request $request, $id)
     {
+    
         $utilisateur = Utilisateur::find($id);
+        if (!$utilisateur) {
+            return response()->json([
+                'message' => 'Utilisateur non trouvé'
+            ], 404);
+        }
+
         return response()->json([
-            'message' => 'Utilisateur trouvé',
+            'message' => 'Utilisateur  trouvé',
             'utilisateur' => $utilisateur
-        ]);
+        ],201);
     }
 
     /**
@@ -100,7 +109,7 @@ class UtilisateurController extends Controller
         return response()->json([
             'message' => 'Utilisateur mis à jour avec succès',
             'utilisateur' => $utilisateur
-        ]);
+        ],201);
     }
 
     /**
@@ -118,7 +127,7 @@ class UtilisateurController extends Controller
         $utilisateur->delete();
         return response()->json([
             'message' => 'Utilisateur supprimé avec succès'
-        ]);
+        ],201);
     }
 
     public function authentifier(Request $request)
@@ -139,7 +148,52 @@ class UtilisateurController extends Controller
         return response()->json([
             'message' => 'Utilisateur authentifié avec succès',
             'utilisateur' => $utilisateur
-        ]);
+        ],201);
+    }
+
+
+    public function getLatestUsers()
+    {
+        // Récupérer les 10 derniers utilisateurs
+        $users = User::orderBy('created_at', 'desc')->take(10)->get();
+
+        // Retourner la réponse JSON
+        return response()->json($users);
     }
     
+    
+
+
+
+    public function login(Request $request)
+    {
+        // Validation des données
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        // Tentative de connexion
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $user = Auth::user();
+            $token = $user->createToken('authToken')->accessToken;
+
+            // Retourner la réponse JSON avec le token
+            return response()->json([
+                'message' => 'Login successful',
+                'token' => $token,
+                'user' => $user,
+            ], 200);
+        } else {
+            // Échec de l'authentification
+            return response()->json([
+                'message' => 'Unauthorized',
+                'errors' => ['email' => ['Invalid credentials']],
+            ], 401);
+        }
+    }
 }
+
+
+    
+

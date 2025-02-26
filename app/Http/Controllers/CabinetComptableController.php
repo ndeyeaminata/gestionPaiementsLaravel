@@ -25,7 +25,7 @@ class CabinetComptableController extends Controller
         return response()->json([
             'message' => 'Cabinet comptable trouvé',
             'cabinetComptable' => $cabinetComptable,
-        ]);
+        ],201);
     }
     // Créer un cabinet comptable
     public function create(Request $request, $id)
@@ -43,7 +43,7 @@ class CabinetComptableController extends Controller
         return response()->json([
             'message' => 'Cabinet comptable créé avec succès',
             'cabinetComptable' => $cabinetComptable,
-        ],200);
+        ],201);
     }
 
     // Mettre à jour un cabinet comptable
@@ -68,7 +68,7 @@ class CabinetComptableController extends Controller
         return response()->json([
             'message' => 'Cabinet comptable mis à jour avec succès',
             'cabinetComptable' => $cabinetComptable,
-        ],200);
+        ],201);
     }
 
     // Supprimer un cabinet comptable
@@ -77,6 +77,6 @@ class CabinetComptableController extends Controller
         $cabinetComptable = CabinetComptable::findOrFail($id);
         $cabinetComptable->delete();
 
-        return response()->json(['message' => 'Cabinet comptable supprimé avec succès']);
+        return response()->json(['message' => 'Cabinet comptable supprimé avec succès'],201);
     }
 }

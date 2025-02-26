@@ -16,7 +16,6 @@ return new class extends Migration
             // Définir les relations avec les autres tables (utilisateur et compte)
             $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
             $table->foreignId('compte_id')->constrained('comptes')->onDelete('cascade');
-            
             $table->string('role')->nullable();
             $table->timestamps();
         });

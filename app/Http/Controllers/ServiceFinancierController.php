@@ -35,7 +35,10 @@ class ServiceFinancierController extends Controller
 
         $serviceFinancier = ServiceFinancier::create($validated);
 
-        return response()->json($serviceFinancier, 201);
+        return response()->json([
+            'message' => 'Service financier créé avec succès',
+            'serviceFinancier' => $serviceFinancier,
+        ],201);
     }
 
     // Met à jour un service financier existant
@@ -54,7 +57,10 @@ class ServiceFinancierController extends Controller
 
         $serviceFinancier->update($validated);
 
-        return response()->json($serviceFinancier);
+        return response()->json([
+            'message' => 'Service financier mis à jour avec succès',
+            'serviceFinancier' => $serviceFinancier,
+        ],201);
     }
 
     // Supprime un service financier
@@ -68,6 +74,6 @@ class ServiceFinancierController extends Controller
 
         $serviceFinancier->delete();
 
-        return response()->json(['message' => 'Service financier supprimé avec succès']);
+        return response()->json(['message' => 'Service financier supprimé avec succès'],201);
     }
 }

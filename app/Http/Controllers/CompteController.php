@@ -15,7 +15,7 @@ class CompteController extends Controller
     }
 
     // Afficher un compte spécifique
-    public function show($id)
+    public function show(Request $request,$id)
     {
         $compte = Compte::find($id);
         if (!$compte) {
@@ -24,13 +24,13 @@ class CompteController extends Controller
         return response()->json([
             'message' => 'Compte trouvé ',
             'compte' => $compte,
-        ],200);
+        ],201);
     }
 
     // Créer un nouveau compte
-    public function create(Request $request, $id)
+    public function create(Request $request)
     {
-        $request = validate([
+        $request -> validate([
             'email' => 'required|email|unique:comptes,email',
             'password' => 'required|min:6',
         ]);
@@ -43,7 +43,7 @@ class CompteController extends Controller
         return response()->json([
             'message' => 'Compte créé avec succès',
             'compte' => $compte,
-        ],200);
+        ],201);
     }
 
     // Mettre à jour un compte
@@ -61,7 +61,7 @@ class CompteController extends Controller
             [
                 'message' => 'Compte mis à jour avec succès',
                 'compte' => $compte,
-            ],200
+            ],201
         );
     }
 
@@ -71,6 +71,6 @@ class CompteController extends Controller
         $compte = Compte::findOrFail($id);
         $compte->delete();
 
-        return response()->json(['message' => 'Compte supprimé avec succès']);
+        return response()->json(['message' => 'Compte supprimé avec succès'],201);
     }
 }

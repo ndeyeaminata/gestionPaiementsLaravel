@@ -14,7 +14,7 @@ class UtilisateurSeeder extends Seeder
             [
                 'nom' => 'Sarr',
                 'prenom' => 'Aminata',
-                'email' => 'aminata.doe@example.com',
+                'email' => 'aminata2@gmail.com',
                 'password' => Hash::make('passer123'), // Hachage sécurisé
                 'telephone' => '771234569',
                 'role_id' => 1, 

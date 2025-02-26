@@ -22,7 +22,9 @@ class RapportController extends Controller
             return response()->json(['message' => 'Rapport non trouvé'], 404);
         }
 
-        return response()->json($rapport);
+        return response()->json([
+            'rapport' => $rapport,
+        ]);
     }
 
     // Crée un nouveau rapport
@@ -37,7 +39,9 @@ class RapportController extends Controller
 
         $rapport = Rapport::create($validated);
 
-        return response()->json($rapport, 201);
+        return response()->json([
+            'message' => 'Rapport enregistré avec succes'
+        ],201);
     }
 
     // Met à jour un rapport existant
@@ -58,7 +62,10 @@ class RapportController extends Controller
 
         $rapport->update($validated);
 
-        return response()->json($rapport);
+        return response()->json([
+            'message' => 'Rapport mis à jour avec succès',
+            'rapport' => $rapport,
+        ],201);
     }
 
     // Supprime un rapport
@@ -72,6 +79,6 @@ class RapportController extends Controller
 
         $rapport->delete();
 
-        return response()->json(['message' => 'Rapport supprimé avec succès']);
+        return response()->json(['message' => 'Rapport supprimé avec succès'],201);
     }
 }

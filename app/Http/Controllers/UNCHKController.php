@@ -37,7 +37,10 @@ class UNCHKController extends Controller
 
         $unchk = UNCHK::create($validated);
 
-        return response()->json($unchk, 201);
+        return response()->json([
+            'message' => 'UNCHK créé avec succès',
+            'unchk' => $unchk,
+        ],201);
     }
 
     // Met à jour un UNCHK existant
@@ -58,7 +61,10 @@ class UNCHKController extends Controller
 
         $unchk->update($validated);
 
-        return response()->json($unchk);
+        return response()->json([
+            'message' => 'UNCHK mis à jour avec succès',
+            'unchk' => $unchk,
+        ],201);
     }
 
     // Supprime un UNCHK
@@ -72,6 +78,6 @@ class UNCHKController extends Controller
 
         $unchk->delete();
 
-        return response()->json(['message' => 'UNCHK supprimé avec succès']);
+        return response()->json(['message' => 'UNCHK supprimé avec succès'],201);
     }
 }
