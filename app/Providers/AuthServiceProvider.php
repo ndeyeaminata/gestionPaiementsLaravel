@@ -27,5 +27,6 @@ class AuthServiceProvider extends ServiceProvider
         Passport::ignoreRoutes();
 
         //Passport::Routes();
+        
     }
 }

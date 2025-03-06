@@ -1,199 +1,143 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Utilisateur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
-
-
 class UtilisateurController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Récupérer tous les utilisateurs.
      */
     public function index()
     {
-        
         $utilisateurs = Utilisateur::all();
         return response()->json($utilisateurs);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Création d'un utilisateur avec hachage du mot de passe.
      */
     public function create(Request $request)
-{
-    $request->validate([
-        'nom' => 'required|string',
-        'prenom' => 'required|string',
-        'email' => 'required|string|email',
-        'password' => 'required|string',
-        'telephone' => 'required|string',
-    ]);
-
-    $utilisateur = Utilisateur::create([
-        'nom' => $request->nom,
-        'prenom' => $request->prenom,
-        'email' => $request->email,
-        'password' => bcrypt($request->password), // Hachage du mot de passe
-        'telephone' => $request->telephone,
-    ]);
-
-    return response()->json([
-        'message' => 'Utilisateur créé avec succès',
-        'utilisateur' => $utilisateur
-    ],201);
-}
-
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Request $request, $id)
     {
-    
-        $utilisateur = Utilisateur::find($id);
-        if (!$utilisateur) {
-            return response()->json([
-                'message' => 'Utilisateur non trouvé'
-            ], 404);
-        }
+        $request->validate([
+            'nom' => 'required|string',
+            'prenom' => 'required|string',
+            'email' => 'required|string|email|unique:utilisateurs,email',
+            'password' => 'required|string|min:6',
+            'telephone' => 'required|string',
+        ]);
+
+        $utilisateur = Utilisateur::create([
+            'nom' => $request->nom,
+            'prenom' => $request->prenom,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'telephone' => $request->telephone,
+        ]);
 
         return response()->json([
-            'message' => 'Utilisateur  trouvé',
+            'message' => 'Utilisateur créé avec succès',
             'utilisateur' => $utilisateur
-        ],201);
+        ], 201);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Récupérer un utilisateur spécifique.
      */
-   
+    public function show($id)
+    {
+        $utilisateur = Utilisateur::find($id);
+        if (!$utilisateur) {
+            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
+        }
+
+        return response()->json([
+            'message' => 'Utilisateur trouvé',
+            'utilisateur' => $utilisateur
+        ], 200);
+    }
+
     /**
-     * Update the specified resource in storage.
+     * Mettre à jour un utilisateur.
      */
     public function update(Request $request, $id)
     {
         $utilisateur = Utilisateur::find($id);
-
         if (!$utilisateur) {
-            return response()->json([
-                'message' => 'Utilisateur non trouvé'
-            ], 404);
+            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
         }
 
-        $request -> validate([
+        $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
-            'email' => 'required|string',
-            'password' => 'required|string',
+            'email' => 'required|string|email|unique:utilisateurs,email,'.$id,
+            'password' => 'nullable|string|min:6',
             'telephone' => 'required|string',
         ]);
 
-        $utilisateur -> update([
-            'nom' => $request->input ('nom'),
-            'prenom' => $request->input ('prenom'),
-            'email' => $request->input ('email'),
-            'password' => $request->has('password') ? bcrypt($request->input('password')) : $utilisateur->password,
-            'telephone' => $request->input ('telephone'),
-        ]);
-        
+        $utilisateur->nom = $request->nom;
+        $utilisateur->prenom = $request->prenom;
+        $utilisateur->email = $request->email;
+        $utilisateur->telephone = $request->telephone;
+
+        // Vérifier si le mot de passe doit être mis à jour
+        if ($request->filled('password')) {
+            $utilisateur->password = Hash::make($request->password);
+        }
+
+        $utilisateur->save();
+
         return response()->json([
             'message' => 'Utilisateur mis à jour avec succès',
             'utilisateur' => $utilisateur
-        ],201);
+        ], 200);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprimer un utilisateur.
      */
     public function destroy($id)
     {
         $utilisateur = Utilisateur::find($id);
-        if(!$utilisateur) {
-            return response()->json([
-                'message' => 'Utilisateur non trouvé'
-            ], 404);
+        if (!$utilisateur) {
+            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
         }
 
         $utilisateur->delete();
-        return response()->json([
-            'message' => 'Utilisateur supprimé avec succès'
-        ],201);
+        return response()->json(['message' => 'Utilisateur supprimé avec succès'], 200);
     }
 
-    public function authentifier(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
-    
-        $utilisateur = Utilisateur::where('email', $request->email)->first();
-    
-        if (!$utilisateur || !Hash::check($request->password, $utilisateur->password)) {
-            return response()->json([
-                'message' => 'Identifiants incorrects'
-            ], 401);
-        }
-    
-        return response()->json([
-            'message' => 'Utilisateur authentifié avec succès',
-            'utilisateur' => $utilisateur
-        ],201);
-    }
-
-
-    public function getLatestUsers()
-    {
-        // Récupérer les 10 derniers utilisateurs
-        $users = User::orderBy('created_at', 'desc')->take(10)->get();
-
-        // Retourner la réponse JSON
-        return response()->json($users);
-    }
-    
-    
-
-
-
+    /**
+     * Connexion d'un utilisateur et génération du token Passport.
+     */
     public function login(Request $request)
     {
-        // Validation des données
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-        // Tentative de connexion
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = Auth::user();
-            $token = $user->createToken('authToken')->accessToken;
+        $utilisateur = Utilisateur::where('email', $request->email)->first();
 
-            // Retourner la réponse JSON avec le token
+        if (!$utilisateur || !Hash::check($request->password, $utilisateur->password)) {
             return response()->json([
-                'message' => 'Login successful',
-                'token' => $token,
-                'user' => $user,
-            ], 200);
-        } else {
-            // Échec de l'authentification
-            return response()->json([
-                'message' => 'Unauthorized',
-                'errors' => ['email' => ['Invalid credentials']],
+                'message' => 'Identifiants incorrects'
             ], 401);
         }
-    }
-}
 
+        $token = $utilisateur->createToken('Personal Access Token')->accessToken;
+
+        return response()->json([
+            'message' => 'Login réussi',
+            'token' => $token,
+            'utilisateur' => $utilisateur
+        ], 200);
+    }
 
     
 
+}

@@ -15,6 +15,9 @@ use App\Http\Controllers\EtatFinancierController;
 use App\Http\Controllers\RapportController;
 use App\Http\Controllers\ServiceFinancierController;
 use App\Http\Controllers\UNCHKController;
+use App\Http\Controllers\AuthController;
+use App\Models\Utilisateur;
+
 
 
 
@@ -73,17 +76,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 //routes pour Utilisateur controller 
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/liste_utilisateurs', [UtilisateurController::class, 'index']);
     Route::post('/create_utilisateurs', [UtilisateurController::class, 'create']);
     Route::get('/show_utilisateurs/{id}', [UtilisateurController::class, 'show']);
     Route::put('/update_utilisateurs/{id}', [UtilisateurController::class, 'update']);
-    Route::delete('/delete_utilisateurs/{id}', [UtilisateurController::class, 'destroy']);
+     Route::delete('/delete_utilisateurs/{id}', [UtilisateurController::class, 'destroy']);
 });
 
 
 //routes pour roleController
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/liste_roles', [RoleController::class, 'index']);
     Route::post('/create_roles', [RoleController::class, 'create']);
     Route::get('/show_roles/{id}', [RoleController::class, 'show']);
@@ -92,7 +95,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 //routes pour administrateurController
-Route::middleware('auth:api','admin')->group(function () {
+Route::middleware('auth:sanctum','admin')->group(function () {
     Route::get('/liste_administrateurs', [AdministrateurController::class, 'index']);
     Route::post('/create_administrateurs', [AdministrateurController::class, 'create']);
     Route::get('/show_administrateurs/{id}', [AdministrateurController::class, 'show']);
@@ -101,7 +104,7 @@ Route::middleware('auth:api','admin')->group(function () {
 });
 
 //routes pour cabinetComptableController
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/liste_cabinetComptables', [CabinetComptableController::class, 'index']);
     Route::post('/create_cabinetComptables', [CabinetComptableController::class, 'create']);
     Route::get('/show_cabinetComptables/{id}', [CabinetComptableController::class, 'show']);
@@ -110,7 +113,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 //routes pour consultantController
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/liste_consultants', [ConsultantController::class, 'index']);
     Route::post('/create_consultants', [ConsultantController::class, 'create']);
     Route::get('/show_consultants/{id}', [ConsultantController::class, 'show']);
@@ -119,7 +122,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 //routes pour compteController
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/liste_comptes', [CompteController::class, 'index']);
     Route::post('/create_comptes', [CompteController::class, 'create']);
     Route::get('/show_comptes/{id}', [CompteController::class, 'show']);
@@ -128,7 +131,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 //routes pour etatFinancierController
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/liste_etatFinanciers', [EtatFinancierController::class, 'index']);
     Route::post('/create_etatFinanciers', [EtatFinancierController::class, 'create']);
     Route::get('/show_etatFinanciers/{id}', [EtatFinancierController::class, 'show']);
@@ -137,7 +140,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 //routes pour fichePresenceController
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/liste_fichePresences', [FichePresenceController::class, 'index']);
     Route::post('/create_fichePresences', [FichePresenceController::class, 'create']);
     Route::get('/show_fichePresences/{id}', [FichePresenceController::class, 'show']);
@@ -146,7 +149,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 //routes pour mentorController
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/liste_mentors', [MentorController::class, 'index']);
     Route::post('/create_mentors', [MentorController::class, 'create']);
     Route::get('/show_mentors/{id}', [MentorController::class, 'show']);
@@ -155,7 +158,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
 //routes pour rapportController
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/liste_rapports', [RapportController::class, 'index']);
     Route::post('/create_rapports', [RapportController::class, 'create']);
     Route::get('/show_rapports/{id}', [RapportController::class, 'show']);
@@ -164,7 +167,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 //routes pour serviceFinancierController
-Route::middleware(['auth:api'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/liste_serviceFinanciers', [ServiceFinancierController::class, 'index']);
     Route::post('/create_serviceFinanciers', [ServiceFinancierController::class, 'create']);
     Route::get('/show_serviceFinanciers/{id}', [ServiceFinancierController::class, 'show']);
@@ -173,7 +176,7 @@ Route::middleware(['auth:api'])->group(function () {
 });
 
 //route pour UNCHKController
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/liste_UNCHKs', [UNCHKController::class, 'index']);
     Route::post('/create_UNCHKs', [UNCHKController::class, 'create']);
     Route::get('/show_UNCHKs/{id}', [UNCHKController::class, 'show']);
@@ -181,5 +184,5 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/delete_UNCHKs/{id}', [UNCHKController::class, 'destroy']);
 });
 
-//route pour login
-Route::post('/login',[UtilisateurController::class, 'login']);
+
+Route::post('/auth/login', [AuthController::class, 'login']); 
