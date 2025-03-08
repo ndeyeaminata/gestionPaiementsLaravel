@@ -15,7 +15,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('telephone');
+<<<<<<< Updated upstream
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade'); // Ajout de onDelete cascade
+=======
+            $table->string('role_id');
+            $table->rememberToken(); // Ajoute la colonne remember_token
+>>>>>>> Stashed changes
             $table->timestamps();
         });
     }

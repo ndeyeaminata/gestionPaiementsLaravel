@@ -179,9 +179,15 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/liste_utilisateurs', [UtilisateurController::class, 'index']);
     Route::post('/create_utilisateurs', [UtilisateurController::class, 'create']);
     Route::get('/show_utilisateurs/{id}', [UtilisateurController::class, 'show']);
+<<<<<<< Updated upstream
     Route::put('/utilisateurs/{id}', [UtilisateurController::class, 'update']);
     Route::delete('/utilisateurs/{id}', [UtilisateurController::class, 'destroy']);
     Route::post('/utilisateurs/authentifier', [UtilisateurController::class, 'authentifier']);
+=======
+    Route::put('/update_utilisateurs/{id}', [UtilisateurController::class, 'update']);
+    Route::delete('/delete_utilisateurs/{id}', [UtilisateurController::class, 'destroy']);
+});
+>>>>>>> Stashed changes
 
     
     Route::get('/liste_roles', [RoleController::class, 'index']);

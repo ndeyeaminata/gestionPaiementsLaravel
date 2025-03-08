@@ -9,6 +9,7 @@ class CabinetComptableSeeder extends Seeder
 {
     public function run(): void
     {
+<<<<<<< Updated upstream
         CabinetComptable::create([
             'nomCabinet' => 'Cabinet A',
             'etatFinancier_id' => 1,
@@ -18,5 +19,8 @@ class CabinetComptableSeeder extends Seeder
             'nomCabinet' => 'Cabinet B',
             'etatFinancier_id' => 2,
         ]);
+=======
+      
+>>>>>>> Stashed changes
     }
 }

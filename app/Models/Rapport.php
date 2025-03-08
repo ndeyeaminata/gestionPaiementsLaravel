@@ -5,7 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 class Rapport extends Model
 {
     use HasFactory;

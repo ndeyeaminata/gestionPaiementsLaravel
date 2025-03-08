@@ -13,6 +13,7 @@ class FichePresenceSeeder extends Seeder
      */
     public function run(): void
     {
+<<<<<<< Updated upstream
         FichePresence::create([
             'nombre_heures' => 8,
             'certificat' => 'Certificat PHP',
@@ -38,6 +39,29 @@ class FichePresenceSeeder extends Seeder
             'statut' => 'rejetée',
             'mentor_id' => 3,
             'consultant_id' => 3,
+=======
+        DB::table('fiche_presences')->insert([
+            [
+                'nombre_heures' => 8,
+                'certificat' => 'certificat PHP',
+                'numero_groupe' => 1,
+                'statut' => 'Validé',
+                'mentor_id' => 1, // Assurez-vous que cet ID correspond à un mentor existant
+                'consultant_id' => 1, // Assurez-vous que cet ID correspond à un consultant existant
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'nombre_heures' => 6,
+                'certificat' => 'certificat JAVA',
+                'numero_groupe' => 2,
+                'statut' => 'En attente',
+                'mentor_id' => 2,
+                'consultant_id' => 2,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+>>>>>>> Stashed changes
         ]);
     }
 }
