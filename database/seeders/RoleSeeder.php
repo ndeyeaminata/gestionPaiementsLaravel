@@ -9,11 +9,27 @@ class RoleSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('roles')->insert([
-            ['nomRole' => 'Administrateur', 'created_at' => now(), 'updated_at' => now()],
-            ['nomRole' => 'Consultant', 'created_at' => now(), 'updated_at' => now()],
-            ['nomRole' => 'Mentor', 'created_at' => now(), 'updated_at' => now()],
-            ['nomRole' => 'Utilisateur', 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        $roles = [
+            'Administrateur',
+            'Consultant',
+            'Mentor',
+            'Utilisateur',
+        ];
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($roles as $role) {
+                DB::table('roles')->updateOrInsert(
+                    ['nomRole' => $role],
+                    ['created_at' => now(), 'updated_at' => now()]
+                );
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error("Erreur lors de l'insertion des rôles : " . $e->getMessage());
+        }
     }
 }

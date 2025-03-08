@@ -7,7 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class EtatFinancierSeeder extends Seeder
 {
-    public function run()
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
     {
         DB::table('etat_financiers')->insert([
             [

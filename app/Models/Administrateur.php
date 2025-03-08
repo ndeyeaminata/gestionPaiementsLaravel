@@ -13,18 +13,20 @@ class Administrateur extends Model
     protected $fillable = [
         'utilisateur_id',
         'compte_id',
-        'role', // Ajoutez ici d'autres champs spécifiques à l'administrateur
+        'role',
     ];
 
+  
+
     // Relation avec l'utilisateur
-    public function utilisateur()
+    public function utilisateur(): BelongsTo
     {
-        return $this->belongsTo(Utilisateur::class);
+        return $this->belongsTo(Utilisateur::class, 'utilisateur_id', 'id');
     }
 
     // Relation avec le compte
-    public function compte()
+    public function compte(): BelongsTo
     {
-        return $this->belongsTo(Compte::class);
+        return $this->belongsTo(Compte::class, 'compte_id', 'id');
     }
 }

@@ -7,80 +7,53 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    // Liste tous les rôles
+    // Liste des rôles
     public function index()
     {
-        $roles = Role::all();
-        return response()->json([
-            'message' => 'Liste des rôles',
-            'roles' => $roles,
-        ],201);
+        return response()->json(Role::all(), 200);
     }
 
-    // Affiche un rôle spécifique
-    public function show($id)
-    {
-        $role = Role::find($id);
-
-        if (!$role) {
-            return response()->json(['message' => 'Rôle non trouvé'], 404);
-        }
-
-        return response()->json(
-            [
-                'message' => 'Rôle trouvé',
-                'role' => $role,
-            ],201
-        );
-    }
-
-    // Crée un nouveau rôle
+    // Création d'un rôle
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'nomRole' => 'required|string|max:255|unique:roles,nomRole',
+            'name' => 'required|string|max:255|unique:roles,name'
         ]);
 
         $role = Role::create($validated);
-
-        return response()->json([
-            'message' => 'Rôle créé avec succès',
-            'role' => $role,
-        ],201);
+        return response()->json(['message' => 'Rôle créé avec succès', 'role' => $role], 201);
     }
 
-    // Met à jour un rôle existant
+    // Afficher un rôle spécifique
+    public function show($id)
+    {
+        $role = Role::findOrFail($id);
+        return response()->json($role, 200);
+    }
+
+    // Mise à jour d'un rôle
     public function update(Request $request, $id)
     {
-        $role = Role::find($id);
-
-        if (!$role) {
-            return response()->json(['message' => 'Rôle non trouvé'], 404);
-        }
+        $role = Role::findOrFail($id);
 
         $validated = $request->validate([
-            'nomRole' => 'required|string|max:255|unique:roles,nomRole,' . $id,
+            'name' => 'required|string|max:255|unique:roles,name,' . $id
         ]);
 
         $role->update($validated);
-
-        return response()->json([
-            'message' => 'Rôle mis à jour avec succès',
-            'role' => $role,
-        ],201);
+        return response()->json(['message' => 'Rôle mis à jour avec succès', 'role' => $role], 200);
     }
 
-    // Supprime un rôle
+    // Suppression d'un rôle avec protection pour les rôles critiques
     public function destroy($id)
     {
-        $role = Role::find($id);
-
-        if (!$role) {
-            return response()->json(['message' => 'Rôle non trouvé'], 404);
+        $role = Role::findOrFail($id);
+        
+        if (in_array($role->name, ['admin'])) {
+            return response()->json(['message' => 'Ce rôle ne peut pas être supprimé'], 403);
         }
-
+        
         $role->delete();
-
-        return response()->json(['message' => 'Rôle supprimé avec succès'],201);
+        return response()->json(['message' => 'Rôle supprimé avec succès'], 204);
     }
 }

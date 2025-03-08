@@ -9,14 +9,22 @@ class FichePresenceSeeder extends Seeder
 {
     public function run()
     {
+        // Vérifier si des mentors et consultants existent
+        $mentor1 = DB::table('mentors')->first();
+        $consultant1 = DB::table('consultants')->first();
+
+        if (!$mentor1 || !$consultant1) {
+            return; // Empêche l'exécution si les références n'existent pas
+        }
+
         DB::table('fiche_presences')->insert([
             [
                 'nombre_heures' => 8,
                 'certificat' => 'certificat_presence_01',
                 'numero_groupe' => 1,
                 'statut' => 'Validé',
-                'mentor_id' => 1, // Assurez-vous que cet ID correspond à un mentor existant
-                'consultant_id' => 1, // Assurez-vous que cet ID correspond à un consultant existant
+                'mentor_id' => $mentor1->id,
+                'consultant_id' => $consultant1->id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -25,8 +33,8 @@ class FichePresenceSeeder extends Seeder
                 'certificat' => 'certificat_presence_02',
                 'numero_groupe' => 2,
                 'statut' => 'En attente',
-                'mentor_id' => 2,
-                'consultant_id' => 2,
+                'mentor_id' => $mentor1->id,
+                'consultant_id' => $consultant1->id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

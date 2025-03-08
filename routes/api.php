@@ -21,14 +21,6 @@ use App\Models\Utilisateur;
 
 
 
-use Laravel\Passport\Http\Controllers\AccessTokenController;
-use Laravel\Passport\Http\Controllers\AuthorizationController;
-use Laravel\Passport\Http\Controllers\ApproveAuthorizationController;
-use Laravel\Passport\Http\Controllers\DenyAuthorizationController;
-use Laravel\Passport\Http\Controllers\ClientController;
-use Laravel\Passport\Http\Controllers\PersonalAccessTokenController;
-use Laravel\Passport\Http\Controllers\TransientTokenController;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -39,36 +31,6 @@ use Laravel\Passport\Http\Controllers\TransientTokenController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-//Enregistrer les itinéraires Passport manuellement (uniquement s'ils sont ignorés dans AuthServiceProvider)
-
-Route::group(['prefix' => 'oauth'], function () {
-    // Route pour obtenir un token d'accès
-    Route::post('/token', [AccessTokenController::class, 'issueToken'])->name('passport.token');
-    
-    // Route pour l'autorisation des clients
-    Route::get('/authorize', [AuthorizationController::class, 'authorize'])->name('passport.authorizations.authorize');
-    Route::post('/authorize', [ApproveAuthorizationController::class, 'approve'])->name('passport.authorizations.approve');
-    Route::delete('/authorize', [DenyAuthorizationController::class, 'deny'])->name('passport.authorizations.deny');
-    
-    // Routes pour les clients
-    Route::post('/clients', [ClientController::class, 'store'])->name('passport.clients.store');
-    Route::put('/clients/{client_id}', [ClientController::class, 'update'])->name('passport.clients.update');
-    Route::delete('/clients/{client_id}', [ClientController::class, 'destroy'])->name('passport.clients.destroy');
-    Route::get('/clients', [ClientController::class, 'forUser'])->name('passport.clients.index');
-
-     // Routes pour les tokens personnels
-     Route::get('/personal-access-tokens', [PersonalAccessTokenController::class, 'forUser'])->name('passport.personal.tokens.index');
-     Route::post('/personal-access-tokens', [PersonalAccessTokenController::class, 'store'])->name('passport.personal.tokens.store');
-     Route::delete('/personal-access-tokens/{token_id}', [PersonalAccessTokenController::class, 'destroy'])->name('passport.personal.tokens.destroy');
-    
-     // Route pour les tokens transitoires
-      Route::post('/token/refresh', [TransientTokenController::class, 'refresh'])->name('passport.token.refresh');
-});
-
-    
-    
-
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -184,5 +146,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/delete_UNCHKs/{id}', [UNCHKController::class, 'destroy']);
 });
 
-
+//Route pour la connexion
 Route::post('/auth/login', [AuthController::class, 'login']); 
+Route::post('/auth/logout', [AuthController::class, 'logout']); 

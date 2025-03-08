@@ -4,26 +4,20 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateCabinetComptablesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('cabinet_comptables', function (Blueprint $table) {
             $table->id();
-            $table->string('nomCabinet');
-            $table->foreignId('etatFinancier_id')->constrained('etat_financiers');
+            $table->string('nom_cabinet');
+            $table->foreignId('etat_financier_id')->constrained('etat_financiers')->onDelete('cascade');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('cabinet_comptables');
     }
-};
+}

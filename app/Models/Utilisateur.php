@@ -13,13 +13,22 @@ class Utilisateur extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $table = 'utilisateurs'; // Indique la table utilisée
-
-    protected $fillable = ['nom', 'prenom', 'email', 'password', 'telephone'];
+    protected $fillable = ['nom', 'prenom', 'email', 'password', 'telephone', 'role_id'];
 
     protected $hidden = ['password', 'remember_token'];
 
-    // Hashage du mot de passe
+    protected $casts = [
+        'nom' => 'string',
+        'prenom' => 'string',
+        'email' => 'string',
+        'password' => 'string',
+        'telephone' => 'string',
+        'role_id' => 'integer',
+    ];
+
+    public $timestamps = false; // Désactiver si non utilisé
+
+    // Hashage automatique du mot de passe
     protected static function boot()
     {
         parent::boot();
@@ -37,9 +46,16 @@ class Utilisateur extends Authenticatable
         });
     }
 
-    // Relation avec le modèle Role
+    public function setPasswordAttribute($value)
+    {
+        if (!password_get_info($value)['algo']) {
+            $this->attributes['password'] = bcrypt($value);
+        }
+    }
+
+    // Relation avec Role (One-to-One)
     public function role(): BelongsTo
     {
-        return $this->belongsTo(Role::class, 'role_id');
+        return $this->belongsTo(Role::class, 'role_id', 'id');
     }
 }

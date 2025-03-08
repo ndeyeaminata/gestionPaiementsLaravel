@@ -6,43 +6,39 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class ConsultantSeeder extends Seeder
+class CompteSeeder extends Seeder
 {
     public function run()
     {
-        if (!DB::table('utilisateurs')->where('id', 3)->exists()) {
-            DB::table('utilisateurs')->insert([
-                'nom' => 'Diop',
-                'prenom' => 'Rama',
-                'email' => 'rama3@gmail.com',
-                'password' => Hash::make('password123'), // Hachage sécurisé
-                'telephone' => '771234569',
-                'role_id' => 3, 
-            ]);
-        }
+        // Désactiver les vérifications des clés étrangères
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        if (!DB::table('utilisateurs')->where('id', 4)->exists()) {
-            DB::table('utilisateurs')->insert([
-                'nom' => 'Ndoye',
-                'prenom' => 'Astou',
-                'email' => 'astou4@gmail.com',
-                'password' => Hash::make('password123'), // Hachage sécurisé
-                'telephone' => '771234569',
-                'role_id' => 4, 
-            ]);
-        }
+        // Vider la table comptes
+        DB::table('comptes')->truncate();
 
-        DB::table('consultants')->insert([
+        // Insérer les données
+        DB::table('comptes')->insert([
             [
-                'utilisateur_id' => 3, // ID correspondant à un utilisateur existant
+                'email' => 'user1@example.com',
+                'password' => Hash::make('password123'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'utilisateur_id' => 4, // ID d’un autre utilisateur
+                'email' => 'user2@example.com',
+                'password' => Hash::make('password456'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'email' => 'user3@example.com',
+                'password' => Hash::make('password789'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
         ]);
+
+        // Réactiver les vérifications des clés étrangères
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

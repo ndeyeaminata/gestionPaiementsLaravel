@@ -4,28 +4,22 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateUnchksTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
-        Schema::create('u_n_c_h_k_s', function (Blueprint $table) {
+        Schema::create('unchks', function (Blueprint $table) {
             $table->id();
-            $table->integer('montant');
-            $table->date('date_soumission');
+            $table->decimal('montant', 10, 2);
+            $table->dateTime('date_soumission');
             $table->string('statut');
-            $table->foreignId('etatFinancier_id')->constrained('etat_financiers');
+            $table->foreignId('etat_financier_id')->constrained('etat_financiers')->onDelete('cascade');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('u_n_c_h_k_s');
+        Schema::dropIfExists('unchks');
     }
-};
+}
