@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Certificat;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,6 @@ class CertificatSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Certificat::factory(10)->create();
     }
 }
