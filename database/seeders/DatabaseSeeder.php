@@ -16,15 +16,13 @@ class DatabaseSeeder extends Seeder
             CompteSeeder::class,
             RoleSeeder::class,
             UtilisateurSeeder::class,
-            MentorSeeder::class,
-            ConsultantSeeder::class,
             FichePresenceSeeder::class,
             RapportSeeder::class,
-            AdministrateurSeeder::class,
             EtatFinancierSeeder::class,
-            UNCHKSeeder::class,
+            GroupeSeeder::class,
+            CertificatSeeder::class,
+            StatutSeeder::class,
             ServiceFinancierSeeder::class,
-            CabinetComptableSeeder::class
         ]);
     }
 }

@@ -11,10 +11,8 @@ class CreateFichesPresencesTable extends Migration
         Schema::create('fiches_presences', function (Blueprint $table) {
             $table->id();
             $table->integer('nombre_heures');
-            $table->string('certificat')->nullable();
-            $table->string('numero_groupe');
-            $table->string('statut');
             $table->foreignId('utilisateurs_id')->constrained('utilisateurs')->onDelete('cascade');
+            $table->foreignId('groupe_id')->constrained('groupes')->onDelete('cascade');
             $table->timestamps();
         });
     }

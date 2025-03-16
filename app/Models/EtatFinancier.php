@@ -10,10 +10,10 @@ class EtatFinancier extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['statut'];
+    protected $fillable = ['statut_id'];
 
     protected $casts = [
-        'statut' => 'string',
+        'statut_id' => integer,
     ];
 
 
@@ -22,4 +22,11 @@ class EtatFinancier extends Model
     {
         return $this->hasOne(CabinetComptable::class, 'etat_financier_id', 'id');
     }
+
+
+   public function statut()
+   {
+       return $this->belongsTo(Statut::class);
+   }
+
 }

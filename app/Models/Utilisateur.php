@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Utilisateur extends Authenticatable
 {
@@ -58,4 +59,20 @@ class Utilisateur extends Authenticatable
     {
         return $this->belongsTo(Role::class, 'role_id', 'id');
     }
+
+    public function certificats()
+    {
+        return $this->hasMany(Certificat::class, 'utilisateur_id');
+    }
+
+    public function fichesPresences()
+{
+    return $this->hasMany(FichePresence::class, 'utilisateur_id');
+}
+
+
+public function cabinetsComptables()
+{
+    return $this->hasMany(CabinetComptable::class);
+}
 }

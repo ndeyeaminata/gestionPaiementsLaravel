@@ -18,7 +18,7 @@ class CreateUtilisateursTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('telephone')->nullable();
-            $table->foreignIdFor(Role::Class)->contrained() -> cascadeOnDelete();
+            $table->foreignIdFor(Role::Class)->constrained() -> cascadeOnDelete();
             $table->timestamps();
         });
     }

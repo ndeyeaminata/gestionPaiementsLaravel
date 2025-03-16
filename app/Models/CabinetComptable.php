@@ -13,9 +13,16 @@ class CabinetComptable extends Model
     protected $fillable = ['nomCabinet', 'adresse', 'telephone', 'email', 'etat_financier_id'];
 
 
-    // Relation avec EtatFinancier
-    public function etatFinancier(): BelongsTo
+    public function utilisateur()
     {
-        return $this->belongsTo(EtatFinancier::class, 'etat_financier_id', 'id');
+        return $this->belongsTo(Utilisateur::class);
+    }
+
+    /**
+     * Relation : Un CabinetComptable appartient à un EtatFinancier.
+     */
+    public function etatFinancier()
+    {
+        return $this->belongsTo(EtatFinancier::class);
     }
 }

@@ -13,7 +13,7 @@ class CreateCabinetComptablesTable extends Migration
             $table->id();
             $table->string('Nomcabinet');
             $table->string('adresse');
-            $table->foreignIdFor(Utilisateur::class)->contrained()->onDelete('cascade');
+            $table->foreignIdFor(Utilisateur::class)->constrained()->onDelete('cascade');
             $table->foreignId('etat_financier_id')->constrained('etat_financiers')->onDelete('cascade');
             $table->timestamps();
         });

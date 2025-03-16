@@ -10,7 +10,8 @@ class CreateEtatFinanciersTable extends Migration
     {
         Schema::create('etat_financiers', function (Blueprint $table) {
             $table->id();
-            $table->string('statut');
+            $table->decimal('montant',10,2);
+            $table->foreignId('statut_id')->constrained('statuts')->onDelete('cascade');
             $table->timestamps();
         });
     }

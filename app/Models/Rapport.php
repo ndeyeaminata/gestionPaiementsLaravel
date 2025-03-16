@@ -18,10 +18,10 @@ class Rapport extends Model
     ];
 
     protected $casts = [
-        'date_soumission' => 'datetime',
-        'detail_rapport' => 'string',
-        'statut' => 'string',
-        'consultant_id' => 'integer',
+        'date_soumission' => dateTime,
+        'detail_rapport' => string,
+        'statut' => string,
+        'consultant_id' => integer,
     ];
 
 

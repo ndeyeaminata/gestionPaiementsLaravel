@@ -1,22 +1,25 @@
 <?php
 
+use App\Models\Utilisateur;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Laravel\Passport\Passport;
-use App\Http\Controllers\UtilisateurController;
-use App\Http\Controllers\FichePresenceController;
-use App\Http\Controllers\MentorController;
-use App\Http\Controllers\ConsultantController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UNCHKController;
 use App\Http\Controllers\CompteController;
+use App\Http\Controllers\GroupeController;
+use App\Http\Controllers\MentorController;
+use App\Http\Controllers\StatutController;
+use App\Http\Controllers\RapportController;
+use App\Http\Controllers\CertificatController;
+use App\Http\Controllers\ConsultantController;
+use App\Http\Controllers\UtilisateurController;
+use App\Http\Controllers\EtatFinancierController;
+use App\Http\Controllers\FichePresenceController;
 use App\Http\Controllers\AdministrateurController;
 use App\Http\Controllers\CabinetComptableController;
-use App\Http\Controllers\EtatFinancierController;
-use App\Http\Controllers\RapportController;
 use App\Http\Controllers\ServiceFinancierController;
-use App\Http\Controllers\UNCHKController;
-use App\Http\Controllers\AuthController;
-use App\Models\Utilisateur;
 
 
 
@@ -53,8 +56,11 @@ Route::prefix('admin')->group(function () {
         Route::apiResource('/etatFinanciers', EtatFinancierController::class);
         Route::apiResource('/rapports', RapportController::class);
         Route::apiResource('/serviceFinanciers', ServiceFinancierController::class);
-        Route::apiResource('/unchks', UNCHKController::class);
+        Route::apiResource('/certificats', CertificatController::class);
+        Route::apiResource('/groupes', GroupeController::class);
+        Route::apiResource('/statuts', StatutController::class);
         Route::post('/logout', [AuthController::class, 'logout']);
+
 
     });
 });

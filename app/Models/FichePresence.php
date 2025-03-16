@@ -12,25 +12,32 @@ class FichePresence extends Model
 
     protected $fillable = [
         'nombre_heures',
-        'certificat',
-        'numero_groupe',
-        'statut',
-        'mentor_id',
+        'utilisateur_id',
+        'groupe_id',
     ];
 
     protected $casts = [
-        'nombre_heures' => 'integer',
-        'certificat' => 'string',
-        'numero_groupe' => 'string',
-        'statut' => 'string',
-        'mentor_id' => 'integer',
+        'nombre_heures' => integer,
+        'utilisateur_id' => integer,
+        'groupe_id' => integer,
     ];
 
-   
 
-    // Relation avec Mentor (One-to-Many)
-    public function mentor(): BelongsTo
+
+    public function utilisateur()
     {
-        return $this->belongsTo(Mentor::class, 'mentor_id', 'id');
+        return $this->belongsTo(Utilisateur::class, 'utilisateur_id')->whereHas('role', function ($query) {
+            $query->where('nomRole', 'mentor');
+        });
+    }
+
+
+    public function groupe()
+    {
+        return $this->belongsTo(Groupe::class, 'groupe_id');
     }
 }
+
+
+
+

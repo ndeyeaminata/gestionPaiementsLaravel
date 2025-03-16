@@ -11,9 +11,9 @@ class CreateRapportsTable extends Migration
         Schema::create('rapports', function (Blueprint $table) {
             $table->id();
             $table->dateTime('date_soumission');
-            $table->text('detail_rapport');
-            $table->string('statut');
+            $table->string('detail_rapport');
             $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
+            $table->foreignId('groupe_id')->constrained('groupes')->onDelete('cascade');
             $table->timestamps();
         });
     }
