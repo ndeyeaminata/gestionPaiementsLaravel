@@ -76,4 +76,61 @@ class MentorController extends Controller
         return response()->json(['message' => 'Mentor supprimé avec succès'],201);
     }
 
-}
+        public function showProfile()
+        {
+            $mentor = Auth::user();
+
+            // Vérifie si l'utilisateur est bien un mentor
+            if (!$mentor->mentor) {
+                return response()->json(['message' => 'Accès refusé. Vous n\'êtes pas un mentor.'], 403);
+            }
+
+            return response()->json([
+                'id' => $mentor->id,
+                'nom' => $mentor->nom,
+                'prenom' => $mentor->prenom,
+                'email' => $mentor->email,
+                'telephone' => $mentor->telephone,
+                'created_at' => $mentor->created_at,
+            ], 200);
+        }
+
+
+        public function updateProfile(Request $request)
+    {
+        // Récupère le mentor connecté
+        $mentor = Auth::user();
+
+        // Vérifie si l'utilisateur est bien un mentor
+        if (!$mentor->mentor) {
+            return response()->json(['message' => 'Accès refusé. Vous n\'êtes pas un mentor.'], 403);
+        }
+
+        // Validation des champs
+        $request->validate([
+            'nom' => 'string|max:255',
+            'prenom' => 'string|max:255',
+            'email' => 'email|unique:utilisateurs,email,' . $mentor->id,
+            'telephone' => 'string|max:20',
+            'password' => 'nullable|min:6|confirmed',
+        ]);
+
+        // Mise à jour des informations du mentor
+        $mentor->nom = $request->nom ?? $mentor->nom;
+        $mentor->prenom = $request->prenom ?? $mentor->prenom;
+        $mentor->email = $request->email ?? $mentor->email;
+        $mentor->telephone = $request->telephone ?? $mentor->telephone;
+
+        // Mise à jour du mot de passe si fourni
+        if ($request->password) {
+            $mentor->password = Hash::make($request->password);
+        }
+
+        $mentor->save();
+
+        return response()->json(['message' => 'Profil mis à jour avec succès', 'mentor' => $mentor], 200);
+    }
+
+    }
+
+

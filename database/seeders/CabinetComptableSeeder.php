@@ -14,18 +14,20 @@ class CabinetComptableSeeder extends Seeder
     {
         DB::table('cabinet_comptables')->insert([
             [
-                'nom' => 'Cabinet ABC',
-                'adresse' => '123 Rue Principale, Dakar',
-                'telephone' => 'è-3456789',
-                'email' => 'contact@cabinetabc.sn',
+                'nomCabinet' => 'Cabinet A',
+                'adresse' => '123 Rue des Entreprises, Dakar',
+                'telephone' => '33789054',
+                'email' => 'cabinet@cabinetA.sn',
+                'etat_financier_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'nom' => 'Cabinet XYZ',
-                'adresse' => '456 Avenue des Entreprises, Thiès',
+                'nomCabinet' => 'Cabinet B',
+                'adresse' => '456 Avenue des Entreprises, Dakar',
                 'telephone' => '777654321',
-                'email' => 'info@cabinetxyz.sn',
+                'email' => 'cabinet@cabinetB.sn',
+                'etat_financier_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

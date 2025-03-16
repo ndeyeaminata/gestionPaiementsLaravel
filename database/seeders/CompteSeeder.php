@@ -23,18 +23,21 @@ class CompteSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'created_at' => now(),
                 'updated_at' => now(),
+                'utilisateur_id' =>1
             ],
             [
                 'email' => 'user2@example.com',
                 'password' => Hash::make('password456'),
                 'created_at' => now(),
                 'updated_at' => now(),
+                'utilisateur_id' =>2
             ],
             [
                 'email' => 'user3@example.com',
                 'password' => Hash::make('password789'),
                 'created_at' => now(),
                 'updated_at' => now(),
+                'utilisateur_id' =>3
             ],
         ]);
 

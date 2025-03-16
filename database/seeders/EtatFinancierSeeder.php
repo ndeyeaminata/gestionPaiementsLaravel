@@ -14,11 +14,13 @@ class EtatFinancierSeeder extends Seeder
     {
         DB::table('etat_financiers')->insert([
             [
+                'id' => 1,
                 'statut' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
+                'id' => 2,
                 'statut' => false,
                 'created_at' => now(),
                 'updated_at' => now(),

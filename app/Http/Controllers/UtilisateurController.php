@@ -21,7 +21,7 @@ class UtilisateurController extends Controller
     /**
      * Création d'un utilisateur avec hachage du mot de passe.
      */
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'nom' => 'required|string',
@@ -31,7 +31,7 @@ class UtilisateurController extends Controller
             'telephone' => 'required|string',
         ]);
 
-        $utilisateur = Utilisateur::create([
+        $utilisateur = Utilisateur::store([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
             'email' => $request->email,
@@ -138,6 +138,6 @@ class UtilisateurController extends Controller
         ], 200);
     }
 
-    
+
 
 }

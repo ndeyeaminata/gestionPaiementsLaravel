@@ -77,4 +77,28 @@ class EtatFinancierController extends Controller
 
         return response()->json(['message' => 'État financier supprimé avec succès'],201);
     }
+
+    public function transfererVersUnchk($id)
+{
+    // Vérifier si l'état financier existe
+    $etat = EtatFinancier::find($id);
+    if (!$etat) {
+        return response()->json(['message' => 'État financier introuvable'], 404);
+    }
+
+    // Vérifier si l'état financier est bien signé
+    if ($etat->statut !== 'Signé') {
+        return response()->json(['message' => 'Seuls les états financiers signés peuvent être transférés'], 400);
+    }
+
+    // Créer une nouvelle entrée dans UNCHK
+    $unchk = UNCHK::create([
+        'etatFinancier_id' => $etat->id,
+        'date_soumission' => now(),
+        'statut' => 'En attente',
+    ]);
+
+    return response()->json(['message' => 'État financier transféré vers UNCHK avec succès', 'unchk' => $unchk], 200);
+}
+
 }

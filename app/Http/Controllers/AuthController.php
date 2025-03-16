@@ -18,12 +18,16 @@ class AuthController extends Controller
             return response()->json($validators->errors(), 422);
         }
 
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
-            $token = $request->user()->createToken('mon_appli');
-            $user = $request->user();
-            return response()->json(['token' => $token->plainTextToken, 'user' => $user]);
+        $utilisateur = Utilisateur::where([['email', $request->email],['role_id', 1]])->first();
 
+        if($utilisateur){
+            if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+                $token = $request->user()->createToken('mon_appli');
+                $user = $request->user();
+                return response()->json(['token' => $token->plainTextToken, 'user' => $user]);
+            }
         }
+
 
 
         if (!Auth::attempt($request->only('email', 'password'))) {

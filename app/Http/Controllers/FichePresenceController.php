@@ -77,4 +77,7 @@ class FichePresenceController extends Controller
 
         return response()->json(['message' => 'État financier supprimé avec succès'],201);
     }
+
+    
+
 }

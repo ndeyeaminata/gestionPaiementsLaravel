@@ -70,4 +70,61 @@ class ConsultantController extends Controller
         $consultant->delete();
         return response()->json(['message' => 'Consultant supprimé avec succès'],201);
     }
+
+
+    public function showProfile()
+    {
+        // Récupère l'utilisateur actuellement connecté
+        $consultant = Auth::user();
+
+        // Vérifie si l'utilisateur est bien un consultant
+        if (!$consultant->consultant) {
+            return response()->json(['message' => 'Accès refusé. Vous n\'êtes pas un consultant.'], 403);
+        }
+
+        return response()->json([
+            'id' => $consultant->id,
+            'nom' => $consultant->nom,
+            'prenom' => $consultant->prenom,
+            'email' => $consultant->email,
+            'telephone' => $consultant->telephone,
+            'created_at' => $consultant->created_at,
+        ], 200);
+    }
+
+
+    public function updateProfile(Request $request)
+    {
+        // Récupère le consultant connecté
+        $consultant = Auth::user();
+
+        // Vérifie si l'utilisateur est bien un consultant
+        if (!$consultant->consultant) {
+            return response()->json(['message' => 'Accès refusé. Vous n\'êtes pas un consultant.'], 403);
+        }
+
+        // Validation des champs
+        $request->validate([
+            'nom' => 'string|max:255',
+            'prenom' => 'string|max:255',
+            'email' => 'email|unique:utilisateurs,email,' . $consultant->id,
+            'telephone' => 'string|max:20',
+            'password' => 'nullable|min:6|confirmed',
+        ]);
+
+        // Mise à jour des informations du consultant
+        $consultant->nom = $request->nom ?? $consultant->nom;
+        $consultant->prenom = $request->prenom ?? $consultant->prenom;
+        $consultant->email = $request->email ?? $consultant->email;
+        $consultant->telephone = $request->telephone ?? $consultant->telephone;
+
+        // Mise à jour du mot de passe si fourni
+        if ($request->password) {
+            $consultant->password = Hash::make($request->password);
+        }
+
+        $consultant->save();
+
+        return response()->json(['message' => 'Profil mis à jour avec succès', 'consultant' => $consultant], 200);
+    }
 }

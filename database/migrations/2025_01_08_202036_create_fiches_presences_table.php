@@ -14,7 +14,7 @@ class CreateFichesPresencesTable extends Migration
             $table->string('certificat')->nullable();
             $table->string('numero_groupe');
             $table->string('statut');
-            $table->foreignId('mentor_id')->constrained('mentors')->onDelete('cascade');
+            $table->foreignId('utilisateurs_id')->constrained('utilisateurs')->onDelete('cascade');
             $table->timestamps();
         });
     }

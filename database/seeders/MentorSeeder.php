@@ -15,6 +15,7 @@ class MentorSeeder extends Seeder
         try {
             // Insérer les utilisateurs et récupérer leur ID
             DB::table('utilisateurs')->insert([
+                'id' => 2,
                 'nom' => 'Sarr',
                 'prenom' => 'Aminata',
                 'email' => 'aminata1@gmail.com',
@@ -24,9 +25,10 @@ class MentorSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-            $utilisateurId1 = DB::getPdo()->lastInsertId();
+            $utilisateurId2 = DB::getPdo()->lastInsertId();
 
             DB::table('utilisateurs')->insert([
+                'id' => 3,
                 'nom' => 'Afana',
                 'prenom' => 'Joe',
                 'email' => 'Joe2@gmail.com',
@@ -36,17 +38,17 @@ class MentorSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-            $utilisateurId2 = DB::getPdo()->lastInsertId();
+            $utilisateurId3 = DB::getPdo()->lastInsertId();
 
             // Insérer les mentors avec les vrais ID
             DB::table('mentors')->insert([
                 [
-                    'utilisateur_id' => $utilisateurId1,
+                    'utilisateur_id' => $utilisateurId2,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
                 [
-                    'utilisateur_id' => $utilisateurId2,
+                    'utilisateur_id' => $utilisateurId3,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],

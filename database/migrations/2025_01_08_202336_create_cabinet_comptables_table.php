@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Utilisateur;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateCabinetComptablesTable extends Migration
 {
@@ -10,7 +11,9 @@ class CreateCabinetComptablesTable extends Migration
     {
         Schema::create('cabinet_comptables', function (Blueprint $table) {
             $table->id();
-            $table->string('nom_cabinet');
+            $table->string('Nomcabinet');
+            $table->string('adresse');
+            $table->foreignIdFor(Utilisateur::class)->contrained()->onDelete('cascade');
             $table->foreignId('etat_financier_id')->constrained('etat_financiers')->onDelete('cascade');
             $table->timestamps();
         });

@@ -13,7 +13,8 @@ class RoleSeeder extends Seeder
             'Administrateur',
             'Consultant',
             'Mentor',
-            'Utilisateur',
+            'Comptable',
+
         ];
 
         DB::beginTransaction();

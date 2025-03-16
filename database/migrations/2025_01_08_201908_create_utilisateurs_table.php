@@ -1,8 +1,11 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Role;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+
 
 class CreateUtilisateursTable extends Migration
 {
@@ -15,7 +18,7 @@ class CreateUtilisateursTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('telephone')->nullable();
-            $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
+            $table->foreignIdFor(Role::Class)->contrained() -> cascadeOnDelete();
             $table->timestamps();
         });
     }

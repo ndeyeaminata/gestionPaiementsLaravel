@@ -10,7 +10,7 @@ class CabinetComptable extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nomCabinet', 'etat_financier_id'];
+    protected $fillable = ['nomCabinet', 'adresse', 'telephone', 'email', 'etat_financier_id'];
 
 
     // Relation avec EtatFinancier

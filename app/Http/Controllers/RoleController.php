@@ -56,4 +56,37 @@ class RoleController extends Controller
         $role->delete();
         return response()->json(['message' => 'Rôle supprimé avec succès'], 204);
     }
+
+    public function assignerRole(Request $request, $id)
+{
+    // Validation des données entrantes
+    $request->validate([
+        'role' => 'required|in:admin,mentor,consultant,comptable',
+    ]);
+
+    // Vérifier si l'utilisateur existe
+    $utilisateur = Utilisateur::find($id);
+    if (!$utilisateur) {
+        return response()->json(['message' => 'Utilisateur introuvable'], 404);
+    }
+
+    // Assigner le rôle
+    $utilisateur->role = $request->role;
+    $utilisateur->save();
+
+    return response()->json(['message' => 'Rôle assigné avec succès', 'utilisateur' => $utilisateur], 200);
+}
+
+public function voirRole($id)
+{
+    // Vérifier si l'utilisateur existe
+    $utilisateur = Utilisateur::find($id);
+    if (!$utilisateur) {
+        return response()->json(['message' => 'Utilisateur introuvable'], 404);
+    }
+
+    return response()->json(['role' => $utilisateur->role], 200);
+}
+
+
 }

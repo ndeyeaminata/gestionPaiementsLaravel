@@ -32,11 +32,17 @@ class CabinetComptableController extends Controller
     {
         $request->validate([
             'nomCabinet' => 'required|string|max:255',
+            'adresse' => 'required|string|max:255',
+            'telephone' => 'required|string|max:20',
+            'email' => 'required|email|unique:cabinets_comptables,email',
             'etatFinancier_id' => 'required|exists:etat_financiers,id',
         ]);
 
         $cabinetComptable = CabinetComptable::create([
             'nomCabinet' => $request->nomCabinet,
+            'adresse' => $request->adresse,
+            'telephone' => $request->telephone,
+            'email' => $request->email,
             'etatFinancier_id' => $request->etatFinancier_id,
         ]);
 
@@ -53,6 +59,9 @@ class CabinetComptableController extends Controller
 
         $request->validate([
             'nomCabinet' => 'required|string|max:255',
+            'adresse' => 'required|string|max:255',
+            'telephone' => 'required|string|max:20',
+            'email' => 'required|email|unique:cabinets_comptables,email,' . $cabinetComptable->id,
             'etatFinancier_id' => 'required|exists:etat_financiers,id',
         ]);
 
@@ -62,6 +71,9 @@ class CabinetComptableController extends Controller
 
         $cabinetComptable->update([
             'nomCabinet' => $request->input ('nomCabinet'),
+            'adresse' => $request->input ('adresse'),
+            'telephone' => $request->input ('telephone'),
+            'email' => $request->input ('email'),
             'etatFinancier_id' => $request->input ('etatFinancier_id'),
         ]);
 
@@ -79,4 +91,69 @@ class CabinetComptableController extends Controller
 
         return response()->json(['message' => 'Cabinet comptable supprimé avec succès'],201);
     }
+
+
+    public function fichePresenceEnAttente()
+    {
+        $fiches = FichePresence::where('statut', 'En attente')->get();
+        return response()->json($fiches, 200);
+    }
+
+    /**
+     * 📌 Valider une fiche de présence
+     */
+    public function validerFichePresence($id)
+    {
+        $fiche = FichePresence::find($id);
+        if (!$fiche) {
+            return response()->json(['message' => 'Fiche de présence introuvable'], 404);
+        }
+
+        $fiche->statut = 'Validé';
+        $fiche->save();
+
+        return response()->json(['message' => 'Fiche de présence validée avec succès', 'fiche' => $fiche], 200);
+    }
+
+    /**
+     * 📌 Liste des rapports en attente
+     */
+    public function rapportsEnAttente()
+    {
+        $rapports = Rapport::where('statut', 'En attente')->get();
+        return response()->json($rapports, 200);
+    }
+
+    /**
+     * 📌 Valider un rapport
+     */
+    public function validerRapport($id)
+    {
+        $rapport = Rapport::find($id);
+        if (!$rapport) {
+            return response()->json(['message' => 'Rapport introuvable'], 404);
+        }
+
+        $rapport->statut = 'Validé';
+        $rapport->save();
+
+        return response()->json(['message' => 'Rapport validé avec succès', 'rapport' => $rapport], 200);
+    }
+
+    /**
+     * 📌 Signer un état financier
+     */
+    public function signerEtatFinancier($id)
+    {
+        $etat = EtatFinancier::find($id);
+        if (!$etat) {
+            return response()->json(['message' => 'État financier introuvable'], 404);
+        }
+
+        $etat->statut = 'Signé';
+        $etat->save();
+
+        return response()->json(['message' => 'État financier signé avec succès', 'etat' => $etat], 200);
+    }
+
 }
