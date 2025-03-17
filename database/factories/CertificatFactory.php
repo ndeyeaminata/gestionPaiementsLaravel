@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use App\Models\Utilisateur;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -27,9 +28,9 @@ class CertificatFactory extends Factory
         return [
             "nomCertificat" => fake()->randomElement($certificats),
             "date_debut" => $dateDebut = fake()->dateTimeBetween(now(), '+3months'),
-            "date_fin" => fake()->dateTime($dateDebut+'6months'),
-            "utilisateur_id" => Utilisateur::pluck('id')->where('role_id', 3)->first(),
-
+            "date_fin" => Carbon::parse($dateDebut)->addMonths(6),
+            //selectionner mentor
+            "utilisateur_id" => fake()->randomElement(Utilisateur::where('role_id', 3)->pluck('id')),
         ];
     }
 }
