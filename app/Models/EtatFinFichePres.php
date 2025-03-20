@@ -10,4 +10,10 @@ class EtatFinFichePres extends Model
     use HasFactory;
 
     protected $table = 'etat_fin_mentor';
+
+
+   public function statut()
+   {
+       return $this->belongsTo(Statut::class);
+   }
 }
