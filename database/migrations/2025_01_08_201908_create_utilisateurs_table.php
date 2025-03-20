@@ -16,10 +16,12 @@ class CreateUtilisateursTable extends Migration
             $table->string('nom');
             $table->string('prenom');
             $table->string('email')->unique();
-            $table->string('password');
             $table->string('telephone')->nullable();
-            $table->foreignIdFor(Role::Class)->constrained() -> cascadeOnDelete();
+            $table->string('password');
+            $table->timestamp('email_verified_at')->nullable();
+            $table->rememberToken();
             $table->timestamps();
+            $table->foreignIdFor(Role::Class)->constrained() -> cascadeOnDelete();
         });
     }
 

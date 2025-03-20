@@ -12,17 +12,25 @@ class Groupe extends Model
 
     protected $fillable = [
         'nomGroupe',
-        'mentor_id',
-        'certificat_id',
     ];
 
-    protected $casts = [
+   /*  protected $casts = [
         'nomGroupe' => string,
         'mentor_id' => integer,
         'certificat_id' => integer,
-    ];
+    ]; */
 
-    public function fichesPresences()
+    public function certificat(){
+        return $this->belongsTo(Certificat::class);
+    }
+
+    public function utilisateur(){
+        return $this->belongsToMany(Utilisateur::class);
+    }
+
+
+
+    public function fichePresence()
 {
     return $this->hasMany(FichePresence::class, 'groupe_id');
 }

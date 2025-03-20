@@ -17,7 +17,7 @@ class Utilisateur extends Authenticatable
     protected $fillable = ['nom', 'prenom', 'email', 'password', 'telephone', 'role_id'];
 
     protected $hidden = ['password', 'remember_token'];
-
+/*
     protected $casts = [
         'nom' => 'string',
         'prenom' => 'string',
@@ -26,8 +26,19 @@ class Utilisateur extends Authenticatable
         'telephone' => 'string',
         'role_id' => 'integer',
     ];
+ */
 
-    public $timestamps = false; // Désactiver si non utilisé
+   /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+     public $timestamps = false; // Désactiver si non utilisé
 
     // Hashage automatique du mot de passe
     protected static function boot()
@@ -47,6 +58,7 @@ class Utilisateur extends Authenticatable
         });
     }
 
+
     public function setPasswordAttribute($value)
     {
         if (!password_get_info($value)['algo']) {
@@ -57,22 +69,8 @@ class Utilisateur extends Authenticatable
     // Relation avec Role (One-to-One)
     public function role(): BelongsTo
     {
-        return $this->belongsTo(Role::class, 'role_id', 'id');
+        return $this->belongsTo(Role::class);
     }
 
-    public function certificats()
-    {
-        return $this->hasMany(Certificat::class, 'utilisateur_id');
-    }
 
-    public function fichesPresences()
-{
-    return $this->hasMany(FichePresence::class, 'utilisateur_id');
-}
-
-
-public function cabinetsComptables()
-{
-    return $this->hasMany(CabinetComptable::class);
-}
 }

@@ -10,15 +10,20 @@ class Statut extends Model
     use HasFactory;
 
     protected $fillable = [
-        'titreStatut',
+        'titreStatut', 'descriptionStatut'
     ];
 
-    protected $cast = [
+    /* protected $cast = [
         'titreStatut' => string,
-    ];
+    ]; */
 
-    public function etatsFinanciers()
+    public function etatFinRapport()
     {
-        return $this->hasMany(EtatFinancier::class);
+        return $this->hasMany(EtatFinRapport::class);
+    }
+
+    public function etatFinFichePres()
+    {
+        return $this->hasMany(EtatFinFichePres::class);
     }
 }

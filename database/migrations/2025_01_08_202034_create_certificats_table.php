@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('nomCertificat');
             $table->date('date_debut');
             $table->date('date_fin');
-            $table->foreignIdFor(Utilisateur::Class)->constrained() -> cascadeOnDelete();
             $table->timestamps();
         });
     }

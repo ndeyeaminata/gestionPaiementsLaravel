@@ -12,29 +12,29 @@ class FichePresence extends Model
 
     protected $fillable = [
         'nombre_heures',
-        'utilisateur_id',
-        'groupe_id',
+        'dateMentorat',
+        'date_soumission',
     ];
-
+/*
     protected $casts = [
         'nombre_heures' => integer,
         'utilisateur_id' => integer,
         'groupe_id' => integer,
-    ];
+    ]; */
 
 
-
+/*
     public function utilisateur()
     {
         return $this->belongsTo(Utilisateur::class, 'utilisateur_id')->whereHas('role', function ($query) {
             $query->where('nomRole', 'mentor');
         });
-    }
+    } */
 
 
     public function groupe()
     {
-        return $this->belongsTo(Groupe::class, 'groupe_id');
+        return $this->belongsTo(MentorGroupe::class);
     }
 }
 

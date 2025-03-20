@@ -12,6 +12,6 @@ class StatutSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+
     }
 }

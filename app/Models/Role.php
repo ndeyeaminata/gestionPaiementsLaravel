@@ -10,17 +10,17 @@ class Role extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nom_role'];
-
+    protected $fillable = ['nomRole', 'descriptionRole'];
+/*
     protected $casts = [
         'nom_role' => 'string',
     ];
 
-    
+     */
 
     // Relation avec Utilisateur (One-to-Many)
     public function utilisateurs(): HasMany
     {
-        return $this->hasMany(Utilisateur::class, 'role_id', 'id');
+        return $this->hasMany(Utilisateur::class);
     }
 }

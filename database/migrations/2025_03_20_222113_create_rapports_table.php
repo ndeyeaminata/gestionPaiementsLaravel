@@ -12,8 +12,7 @@ class CreateRapportsTable extends Migration
             $table->id();
             $table->dateTime('date_soumission');
             $table->string('detail_rapport');
-            $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
-            $table->foreignId('groupe_id')->constrained('groupes')->onDelete('cascade');
+            $table->foreignId('certificat_consultant_id')->constrained('certificat_consultant')->cascadeOnDelete();
             $table->timestamps();
         });
     }

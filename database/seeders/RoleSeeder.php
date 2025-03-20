@@ -13,7 +13,7 @@ class RoleSeeder extends Seeder
             'Administrateur',
             'Consultant',
             'Mentor',
-            'Comptable',
+            'Cabinet Comptable',
 
         ];
 

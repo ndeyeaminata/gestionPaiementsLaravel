@@ -10,23 +10,27 @@ class EtatFinancier extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['statut_id'];
-
+    protected $fillable = ['montant'];
+/*
     protected $casts = [
         'statut_id' => integer,
     ];
-
-
+ */
+/*
     // Relation avec CabinetComptable (One-to-One)
     public function cabinetComptable(): HasOne
     {
         return $this->hasOne(CabinetComptable::class, 'etat_financier_id', 'id');
+    } */
+
+
+    public function rapport()
+    {
+        return $this->belongsToMany(Rapport::class);
     }
-
-
-   public function statut()
-   {
-       return $this->belongsTo(Statut::class);
-   }
+    public function fichePresence()
+    {
+        return $this->belongsToMany(FichePresence::class);
+    }
 
 }

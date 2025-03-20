@@ -13,22 +13,19 @@ class Rapport extends Model
     protected $fillable = [
         'date_soumission',
         'detail_rapport',
-        'statut',
-        'consultant_id',
     ];
 
-    protected $casts = [
+   /*  protected $casts = [
         'date_soumission' => dateTime,
         'detail_rapport' => string,
         'statut' => string,
         'consultant_id' => integer,
-    ];
+    ]; */
 
 
 
-    // Relation avec Consultant (One-to-Many)
     public function consultant(): BelongsTo
     {
-        return $this->belongsTo(Consultant::class, 'consultant_id', 'id');
+        return $this->belongsTo(ConsultantCertificat::class);
     }
 }

@@ -14,20 +14,23 @@ class Certificat extends Model
         'nomCertificat',
         'date_debut',
         'date_fin',
-        'consultant_id',
     ];
-
+/*
     protected $casts = [
         'nomCertificat' => string,
         'date_debut' => date,
         'date_fin'=> date,
         'consultant_id' => integer,
     ];
-
-    public function utilisateur()
-    {
-        return $this->belongsTo(Utilisateur::class, 'utilisateur_id');
-    }
+ */
+public function utilisateur()
+{
+    return $this->belongsToMany(Utilisateur::class);
+}
+public function groupe()
+{
+    return $this->hasMany(Groupe::class);
+}
 
 
 }
