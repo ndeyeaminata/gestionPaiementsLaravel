@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('nomGroupe');
             $table->foreignId('certificat_id')->constrained('certificats');
+            $table->unique(['nomGroupe', 'certificat_id']);
             $table->timestamps();
 
         });
