@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Groupe;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class GroupeSeeder extends Seeder
 {
@@ -12,6 +13,6 @@ class GroupeSeeder extends Seeder
      */
     public function run(): void
     {
-        
+        Groupe::factory(30)->create();
     }
 }

@@ -2,16 +2,18 @@
 
 namespace Database\Factories;
 
+use App\Models\ConsultantCertificat;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Utilisateur;
 
-class GroupeFactory extends Factory
+class RapportFactory extends Factory
 {
     public function definition()
     {
         return [
-            'nomGroupe' => $this->faker->word . ' Group',
-            'mentor_id' => Utilisateur::factory(),
+            'date_soumission' => fake()->dateTimeBetween('-3months', now()),
+            'detail_rapport' => fake()->sentences(5, true),
+            'certificat_consultant_id' => fake()->randomElement(ConsultantCertificat::pluck('id')),
         ];
     }
 }

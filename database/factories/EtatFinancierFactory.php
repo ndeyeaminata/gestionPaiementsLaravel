@@ -11,7 +11,6 @@ class EtatFinancierFactory extends Factory
     {
         return [
             'montant' => $this->faker->randomFloat(2, 1000, 10000),
-            'statut_id' => Statut::factory(),
         ];
     }
 }

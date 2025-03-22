@@ -10,6 +10,7 @@ class StatutFactory extends Factory
     {
         return [
             'titreStatut' => $this->faker->randomElement(['En attente', 'Signé', 'Annulé']),
+
         ];
     }
 }

@@ -29,8 +29,6 @@ class CertificatFactory extends Factory
             "nomCertificat" => fake()->randomElement($certificats),
             "date_debut" => $dateDebut = fake()->dateTimeBetween(now(), '+3months'),
             "date_fin" => Carbon::parse($dateDebut)->addMonths(6),
-            //selectionner mentor
-            "utilisateur_id" => fake()->randomElement(Utilisateur::where('role_id', 3)->pluck('id')),
-        ];
+            ];
     }
 }

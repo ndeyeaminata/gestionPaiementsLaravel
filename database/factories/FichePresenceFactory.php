@@ -2,9 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\MentorGroupe;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Utilisateur;
-use App\Models\Groupe;
 
 class FichePresenceFactory extends Factory
 {
@@ -12,8 +11,9 @@ class FichePresenceFactory extends Factory
     {
         return [
             'nombre_heures' => $this->faker->numberBetween(1, 8),
-            'utilisateur_id' => Utilisateur::factory(),
-            'groupe_id' => Groupe::factory(),
+            'dateMentorat' => $this->faker->dateTimeBetween('-3months', now()),
+            'date_soumission' => $this->faker->dateTimeBetween('-3months', now()),
+            'groupe_mentor_id' => $this->faker->randomElement(MentorGroupe::pluck('id')),
         ];
     }
 }
