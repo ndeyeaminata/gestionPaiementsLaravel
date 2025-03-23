@@ -19,7 +19,10 @@ class MentorGroupeFactory extends Factory
     public function definition(): array
     {
         return [
-            'utilisateur_id'=> fake()->randomElement(Utilisateur::pluck('id')->where('nomRole', 'like', 'Administrateur')) ,
+            'utilisateur_id'=> fake()->randomElement(
+                Utilisateur::join('roles', 'roles.id', '=', 'utilisateurs.role_id')
+                    ->where('roles.nomRole', 'like', '%Mentor%')->pluck('utilisateurs.id')
+                    ) ,
             'groupe_id' => fake()->randomElement(Groupe::pluck('id'))
         ];
     }

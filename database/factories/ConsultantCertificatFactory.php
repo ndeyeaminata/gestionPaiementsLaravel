@@ -19,7 +19,10 @@ class ConsultantCertificatFactory extends Factory
     public function definition(): array
     {
         return [
-            'utilisateur_id'=> fake()->randomElement(Utilisateur::pluck('id')->where('nomRole', 'like', 'Administrateur')) ,
+            'utilisateur_id'=> fake()->randomElement(
+                Utilisateur::join('roles', 'roles.id', '=', 'utilisateurs.role_id')
+                ->where('roles.nomRole', 'like', '%Consultant%')->pluck('utilisateurs.id')
+                ),
             'certificat_id' => fake()->randomElement(Certificat::pluck('id'))
         ];
     }

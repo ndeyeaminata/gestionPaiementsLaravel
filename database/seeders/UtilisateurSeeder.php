@@ -12,25 +12,24 @@ class UtilisateurSeeder extends Seeder
 {
     public function run()
     {
-
         //Creating 10Admins
         Utilisateur::factory(10)->create([
-            "role_id" => Role::pluck('id')->where('nomRole', 'like', 'Administrateur')
+            "role_id" => Role::where('nomRole', 'like', '%Administrateur%')->pluck('id')->first()
         ]);
 
         //Creating 20Mentors
         Utilisateur::factory(20)->create([
-            "role_id" => Role::pluck('id')->where('nomRole', 'like', 'Mentor')
+            "role_id" => Role::where('nomRole', 'like', '%Mentor%')->pluck('id')->first()
         ]);
 
         //Creating 10Consultants
         Utilisateur::factory(10)->create([
-            "role_id" => Role::pluck('id')->where('nomRole', 'like', 'Consultant')
+            "role_id" => Role::where('nomRole', 'like', '%Consultant%')->pluck('id')->first()
         ]);
 
         //Creating 5Comptables
         Utilisateur::factory(5)->create([
-            "role_id" => Role::pluck('id')->where('nomRole', 'like', 'Comptable')
+            "role_id" => Role::where('nomRole', 'like', '%Comptable%')->pluck('id')->first()
         ]);
 
     }

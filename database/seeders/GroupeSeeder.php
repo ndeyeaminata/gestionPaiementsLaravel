@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Certificat;
 use App\Models\Groupe;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -13,6 +14,17 @@ class GroupeSeeder extends Seeder
      */
     public function run(): void
     {
-        Groupe::factory(30)->create();
+        $certs = Certificat::all();
+
+        foreach($certs as $c){
+            $i = 1;
+            for($i = 1; $i<=rand(2,8); $i++){
+                Groupe::factory()->create([
+                    'nomGroupe' => 'Groupe '.$i,
+                    'certificat_id' => $c->id,
+                ]);
+                $i++;
+            }
+        }
     }
 }
