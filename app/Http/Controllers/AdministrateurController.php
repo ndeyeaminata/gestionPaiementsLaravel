@@ -13,7 +13,7 @@ class AdministrateurController extends Controller
         $administrateurs = Administrateur::with('utilisateur', 'compte')->get();
         return response()->json([
             'message' => 'Liste des administrateurs',
-            'administrateurs' => $administrateurs,
+            'data' => $administrateurs,
         ],201);
     }
 

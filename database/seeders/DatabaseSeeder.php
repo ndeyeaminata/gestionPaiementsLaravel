@@ -24,7 +24,9 @@ class DatabaseSeeder extends Seeder
             StatutSeeder::class,
             EtatFinancierSeeder::class,
             EtatFinFichePresSeeder::class,
-            EtatFinRapportSeeder::class
+            EtatFinRapportSeeder::class,
+            ApprenantSeeder::class,
+            ApprenantGroupeSeeder::class
         ]);
     }
 }
