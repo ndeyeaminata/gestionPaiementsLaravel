@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Utilisateur;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -24,18 +25,25 @@ class AuthController extends Controller
             if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
                 $token = $request->user()->createToken('mon_appli');
                 $user = $request->user();
-                return response()->json(['token' => $token->plainTextToken, 'user' => $user]);
+                return response()->json([
+                    'status' => '200',
+                    'token' => $token->plainTextToken,
+                    'user' => $user
+                ]);
             }
         }
 
 
 
         if (!Auth::attempt($request->only('email', 'password'))) {
-            
-            return response()->json("Les identifiants de connexion sont invalides !", 403);
+
+            return response()->json([
+                "message"=>"Les identifiants de connexion sont invalides !",
+                "status"=> 403
+            ]);
         }
 
-       
+
     }
 
 
