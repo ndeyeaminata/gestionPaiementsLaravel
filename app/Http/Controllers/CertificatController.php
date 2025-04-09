@@ -14,12 +14,12 @@ class CertificatController extends Controller
      */
     public function index()
     {
-        $certicats = Certificat::all();
+        $certificats = Certificat::all();
 
         return response()->json([
             "status" => 200,
             "message" => "Tous les Certificats",
-            "data" => $certicats
+            "data" => $certificats
         ]);
     }
 

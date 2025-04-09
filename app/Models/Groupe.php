@@ -12,13 +12,9 @@ class Groupe extends Model
 
     protected $fillable = [
         'nomGroupe',
+        'certificat_id',
     ];
 
-   /*  protected $casts = [
-        'nomGroupe' => string,
-        'mentor_id' => integer,
-        'certificat_id' => integer,
-    ]; */
 
     public function certificat(){
         return $this->belongsTo(Certificat::class);

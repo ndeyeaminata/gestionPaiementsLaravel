@@ -35,7 +35,7 @@ class UtilisateurController extends Controller
             'nom' => $request->nom,
             'prenom' => $request->prenom,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' =>$request->password,
             'telephone' => $request->telephone,
         ]);
 

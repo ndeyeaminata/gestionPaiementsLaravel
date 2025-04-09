@@ -4,62 +4,93 @@ namespace App\Http\Controllers;
 
 use App\Models\Groupe;
 use Illuminate\Http\Request;
+use App\Http\Requests\GroupeStoreRequest;
+use App\Http\Requests\GroupeUpdateRequest;
 
 class GroupeController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Afficher tous les groupes
      */
     public function index()
     {
-        //
+        $groupes = Groupe::with('certificat')->get();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Liste des groupes',
+            'data' => $groupes
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Enregistrer un nouveau groupe
      */
-    public function create()
+    public function store(GroupeStoreRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $groupe = Groupe::create($data);
+
+        if ($groupe) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Groupe créé avec succès',
+                'data' => $groupe
+            ]);
+        }
+
+        return response()->json([
+            'status' => 400,
+            'message' => 'Une erreur est survenue lors de la création'
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
+     * Afficher un groupe spécifique
      */
     public function show(Groupe $groupe)
     {
-        //
+        return response()->json([
+            'status' => 200,
+            'message' => 'Détails du groupe',
+            'data' => $groupe->load('certificat')
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Modifier un groupe
      */
-    public function edit(Groupe $groupe)
+    public function update(GroupeUpdateRequest $request, Groupe $groupe)
     {
-        //
+        if ($request->validated()) {
+            $updated = $groupe->update($request->all());
+
+            if ($updated) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Groupe modifié avec succès',
+                    'data' => $groupe
+                ]);
+            }
+        }
+
+        return response()->json([
+            'status' => 400,
+            'message' => 'Une erreur est survenue lors de la mise à jour'
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Groupe $groupe)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
+     * Supprimer un groupe
      */
     public function destroy(Groupe $groupe)
     {
-        //
+        $groupe->delete();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Groupe supprimé avec succès'
+        ]);
     }
 }

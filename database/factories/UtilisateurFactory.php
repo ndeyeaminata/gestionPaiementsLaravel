@@ -22,7 +22,7 @@ class UtilisateurFactory extends Factory
             "prenom" => fake()->firstName(),
             "email" => fake()->email(),
             "telephone" => fake()->phoneNumber(),
-            "password" => "passer123",
+            "password" => ("passer123"),
             "role_id" => fake()->randomElement(Role::pluck('id'))
         ];
     }

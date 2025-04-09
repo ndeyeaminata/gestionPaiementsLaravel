@@ -18,7 +18,7 @@ class AuthConsultantController extends Controller
             return response()->json($validators->errors(), 422);
         }
 
-        $utilisateur = Utilisateur::where([['email', $request->email],['role_id', 1]])->first();
+        $utilisateur = Utilisateur::where([['email', $request->email],['role_id', 4]])->first();
 
         if($utilisateur){
             if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){

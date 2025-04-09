@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
-class AuthMentorController extends Controller
+class AuthConsultantController extends Controller
 {
     public function login(Request $request){
         $validators = Validator::make($request->all(), [
@@ -18,7 +18,7 @@ class AuthMentorController extends Controller
             return response()->json($validators->errors(), 422);
         }
 
-        $utilisateur = Utilisateur::where([['email', $request->email],['role_id', 4]])->first();
+        $utilisateur = Utilisateur::where([['email', $request->email],['role_id', 3]])->first();
 
         if($utilisateur){
             if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
