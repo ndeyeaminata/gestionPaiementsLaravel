@@ -39,7 +39,7 @@ class AuthController extends Controller
 
             return response()->json([
                 "message"=>"Les identifiants de connexion sont invalides !",
-                "status"=> 403
+                "status"=> 422
             ]);
         }
 
@@ -52,6 +52,6 @@ class AuthController extends Controller
     {
         $user = Auth::user();
         $user->tokens()->delete();
-        return response()->json(['message' => 'Déconnexion réussie'], 200);
+        return response()->json(['message' => 'Déconnexion réussie']);
     }
 }
