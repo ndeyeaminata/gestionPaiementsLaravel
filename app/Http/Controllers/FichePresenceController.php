@@ -10,22 +10,29 @@ class FichePresenceController extends Controller
     // Liste tous les états financiers
     public function index()
     {
-        return response()->json(EtatFinancier::all());
+        $fp = FichePresence::all();
+
+        return response()->json([
+            "status" => 200,
+            "message" => "",
+            "data" => $fp
+        ]);
     }
 
     // Affiche un état financier spécifique
     public function show($id)
     {
-        $etatFinancier = EtatFinancier::find($id);
+        $fp = FichePresence::find($id);
 
-        if (!$etatFinancier) {
-            return response()->json(['message' => 'État financier non trouvé'], 404);
+        if (!$fp) {
+            return response()->json(['message' => 'Fiche de Presence non trouvé'], 404);
         }
 
         return response()->json([
-            'message' => 'État financier trouvé',
-            'etatFinancier' => $etatFinancier,
-        ],201);
+            'status' => 200,
+            'message' => 'Fiche de présence trouvé',
+            'data' => $fp,
+        ]);
     }
 
     // Crée un nouvel état financier
@@ -78,6 +85,6 @@ class FichePresenceController extends Controller
         return response()->json(['message' => 'État financier supprimé avec succès'],201);
     }
 
-    
+
 
 }
