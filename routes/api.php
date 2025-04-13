@@ -47,7 +47,7 @@ Route::prefix('admin')->group(function () {
         Route::apiResource('/utilisateurs', UtilisateurController::class);
         Route::post('/utilisateurs/{id}/assigner-role', [RoleController::class, 'assignerRole']);
         Route::get('/utilisateurs/{id}/role', [RoleController::class, 'voirRole']);
-        Route::apiResource('/fichePresences', FichePresenceController::class);
+        Route::apiResource('/fiches-presences', FichePresenceController::class);
         Route::apiResource('/mentors', MentorController::class);
         Route::apiResource('/consultants', ConsultantController::class);
         Route::apiResource('/apprenants', ApprenantController::class);
