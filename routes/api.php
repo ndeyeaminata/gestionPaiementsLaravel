@@ -41,9 +41,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('admin')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::middleware('auth:sanctum')->group(function(){
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function(){
+    Route::post('/logout', [AuthController::class, 'logout']);
+    //route admin start
+    Route::prefix('admin')->group(function () {
+//    Route::post('/login', [AuthController::class, 'login']);
         Route::apiResource('/utilisateurs', UtilisateurController::class);
         Route::post('/utilisateurs/{id}/assigner-role', [RoleController::class, 'assignerRole']);
         Route::get('/utilisateurs/{id}/role', [RoleController::class, 'voirRole']);
@@ -60,16 +64,18 @@ Route::prefix('admin')->group(function () {
         Route::apiResource('/certificats', CertificatController::class);
         Route::apiResource('/groupes', GroupeController::class);
         Route::apiResource('/statuts', StatutController::class);
-        Route::post('/logout', [AuthController::class, 'logout']);
+//        Route::post('/logout', [AuthController::class, 'logout']);
 
 
     });
 });
 
+//route admin end
+//route mentor start
 Route::prefix('mentors')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
+//    Route::post('/login', [AuthController::class, 'login']);
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('/logout', [AuthController::class, 'logout']);
+//        Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/fiche-presence', [FichePresenceController::class, 'index']);
         Route::get('/fiche-presence/{id}', [FichePresenceController::class, 'show']);
         Route::post('/fiche-presence', [FichePresenceController::class, 'store']);
@@ -80,8 +86,10 @@ Route::prefix('mentors')->group(function () {
     });
 });
 
+//route mentor end
+//route consultant start})
 Route::prefix('consultants')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
+//    Route::post('/login', [AuthController::class, 'login']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/profile', [ConsultantController::class, 'showProfile']);
@@ -94,10 +102,12 @@ Route::prefix('consultants')->group(function () {
     });
 });
 
+//route consultant end
+//route cabinet comptable start
+
 Route::prefix('cabinets-comptables')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
+//    Route::post('/login', [AuthController::class, 'login']);
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/fiche-presence/en-attente', [FichePresenceController::class, 'fichePresenceEnAttente']);
         Route::post('/fiche-presence/valider/{id}', [FichePresenceController::class, 'validerFichePresence']);
         Route::get('/rapports/en-attente', [RapportController::class, 'rapportsEnAttente']);
@@ -107,3 +117,4 @@ Route::prefix('cabinets-comptables')->group(function () {
         Route::post('/etat-financiers/transferer/{id}', [EtatFinancierController::class, 'transfererVersUnchk']);
     });
 });
+//route cabinet comptable end
