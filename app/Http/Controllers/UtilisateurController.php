@@ -6,6 +6,7 @@ use App\Models\Utilisateur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UtilisateurController extends Controller
 {
@@ -14,8 +15,14 @@ class UtilisateurController extends Controller
      */
     public function index()
     {
-        $utilisateurs = Utilisateur::all();
-        return response()->json($utilisateurs);
+        $utilisateurs = Utilisateur::join('roles', 'roles.id', '=', 'utilisateurs.role_id')
+            ->select('utilisateurs.*', 'roles.nomRole')
+            ->paginate(10);
+
+        return response()->json([
+            "status" => 200,
+            "data" => $utilisateurs
+        ]);
     }
 
     /**
@@ -27,22 +34,25 @@ class UtilisateurController extends Controller
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'email' => 'required|string|email|unique:utilisateurs,email',
-            'password' => 'required|string|min:6',
-            'telephone' => 'required|string',
+//            'password' => 'required|string|min:6',
+            'telephone' => 'required|numeric',
+            'role_id' => 'required|exists:roles,id',
         ]);
 
-        $utilisateur = Utilisateur::store([
+        $utilisateur = Utilisateur::create([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
             'email' => $request->email,
-            'password' =>$request->password,
+            'password' =>Hash::make('passer123'),
             'telephone' => $request->telephone,
+            'role_id' => $request->role_id,
         ]);
 
         return response()->json([
+            'status' => 200,
             'message' => 'Utilisateur créé avec succès',
             'utilisateur' => $utilisateur
-        ], 201);
+        ]);
     }
 
     /**
@@ -50,15 +60,20 @@ class UtilisateurController extends Controller
      */
     public function show($id)
     {
-        $utilisateur = Utilisateur::find($id);
+        $utilisateur = Utilisateur::where('utilisateurs.id', '=', $id)
+            ->join('roles', 'roles.id', '=', 'utilisateurs.role_id')
+            ->select('utilisateurs.*', 'roles.nomRole')
+            ->first();
+
         if (!$utilisateur) {
             return response()->json(['message' => 'Utilisateur non trouvé'], 404);
         }
 
         return response()->json([
+            'status' => 200,
             'message' => 'Utilisateur trouvé',
-            'utilisateur' => $utilisateur
-        ], 200);
+            'data' => $utilisateur
+        ]);
     }
 
     /**
@@ -74,15 +89,17 @@ class UtilisateurController extends Controller
         $request->validate([
             'nom' => 'required|string',
             'prenom' => 'required|string',
-            'email' => 'required|string|email|unique:utilisateurs,email,'.$id,
-            'password' => 'nullable|string|min:6',
+            'email' => ['required', 'email', Rule::unique('utilisateurs', 'email')->ignore($utilisateur->id)],
+//            'password' => 'nullable|string|min:6',
             'telephone' => 'required|string',
+            'role_id' => 'required|exists:roles,id',
         ]);
 
         $utilisateur->nom = $request->nom;
         $utilisateur->prenom = $request->prenom;
         $utilisateur->email = $request->email;
         $utilisateur->telephone = $request->telephone;
+        $utilisateur->role_id = $request->role_id;
 
         // Vérifier si le mot de passe doit être mis à jour
         if ($request->filled('password')) {
