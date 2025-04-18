@@ -33,7 +33,6 @@ class RapportController extends Controller
         $validated = $request->validate([
             'date_soumission' => 'required|date',
             'detail_rapport' => 'required|string',
-            'statut' => 'required|string',
             'consultant_id' => 'required|exists:consultants,id',
         ]);
 
@@ -56,7 +55,6 @@ class RapportController extends Controller
         $validated = $request->validate([
             'date_soumission' => 'required|date',
             'detail_rapport' => 'required|string',
-            'statut' => 'required|string',
             'consultant_id' => 'required|exists:consultants,id',
         ]);
 
