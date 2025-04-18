@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 
 
 
-class CreateUtilisateursTable extends Migration
+class   CreateUtilisateursTable extends Migration
 {
     public function up()
     {
