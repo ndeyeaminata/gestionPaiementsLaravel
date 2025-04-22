@@ -59,7 +59,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::apiResource('/comptes', CompteController::class);
         Route::apiResource('/administrateurs', AdministrateurController::class);
         Route::apiResource('/cabinetComptables', CabinetComptableController::class);
-        Route::apiResource('/etatFinanciers', EtatFinancierController::class);
+        Route::apiResource('/EtatFinanciers', EtatFinancierController::class);
         Route::apiResource('/rapports', RapportController::class);
         Route::apiResource('/certificats', CertificatController::class);
         Route::apiResource('/groupes', GroupeController::class);
